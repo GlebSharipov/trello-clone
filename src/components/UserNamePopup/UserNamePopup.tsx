@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 
-import { CustomInput } from "components/CustomInput/CustomInput";
+import { Input } from "components/Input/Input";
 import styled from "styled-components";
 
 export const UserNamePopup: FC = () => {
@@ -9,19 +9,19 @@ export const UserNamePopup: FC = () => {
     setName(e.target.value);
 
   return (
-    <Form>
-      <CustomInput
+    <Root>
+      <Input
         value={name}
         onChange={onChange}
         type="text"
         placeholder="Enter your name"
       />
       <Button type="submit">Send</Button>
-    </Form>
+    </Root>
   );
 };
 
-const Form = styled.form`
+const Root = styled.form`
   position: absolute;
   left: 50%;
   top: 50%;
@@ -30,15 +30,17 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 350px;
-  height: 250px;
+  max-width: 350px;
+  max-height: 250px;
   border: 1px solid black;
   border-radius: 10px;
+  padding: 40px;
 `;
 
 const Button = styled.button`
-  width: 100px;
-  height: 50px;
+  max-width: 100px;
+  max-height: 50px;
   cursor: pointer;
   margin-top: 20px;
+  padding: 5px 10px;
 `;

@@ -2,21 +2,16 @@ import React from "react";
 
 import styled from "styled-components";
 
-interface CustomInputProps {
+interface InputProps {
   type: string;
   placeholder: string;
   value: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-export const CustomInput = ({
-  type,
-  placeholder,
-  value,
-  onChange,
-}: CustomInputProps) => {
+export const Input = ({ type, placeholder, value, onChange }: InputProps) => {
   return (
-    <Input
+    <StyledInput
       type={type}
       value={value}
       onChange={onChange}
@@ -25,8 +20,8 @@ export const CustomInput = ({
   );
 };
 
-const Input = styled.input`
-  width: 250px;
-  height: 50px;
+const StyledInput = styled.input`
+  max-width: 250px;
+  max-height: 50px;
   font-size: 25px;
 `;

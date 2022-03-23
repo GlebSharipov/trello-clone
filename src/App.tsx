@@ -6,16 +6,15 @@ import { UserNamePopup, Board } from "./components";
 
 const App: FC = () => {
   return (
-    <Wrapper>
+    <Root>
       <UserNamePopup />
       <Board />
-    </Wrapper>
+    </Root>
   );
 };
 
-const Wrapper = styled.div`
-  width: 1440px;
+const Root = styled.div`
+  width: 100%;
   height: 100%;
-  margin: 0 auto;
 `;
 export default App;

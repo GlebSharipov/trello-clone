@@ -11,29 +11,28 @@ interface CardProps {
 
 export const Card = ({ text, cardIndex }: CardProps) => {
   return (
-    <CardContainer>
+    <Root>
       {text}
       <RemoveCard />
-    </CardContainer>
+    </Root>
   );
 };
 
-const CardContainer = styled.div`
+const Root = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 335px;
-  min-height: 40px;
+  max-width: 335px;
   background-color: gray;
-  padding: 0 4px;
+  padding: 8px 4px;
   border-radius: 4px;
   margin-bottom: 2px;
   color: white;
 `;
 
 const RemoveCard = styled.img`
-  width: 20px;
-  height: 20px;
+  max-width: 20px;
+  max-height: 20px;
   cursor: pointer;
 `;
 
