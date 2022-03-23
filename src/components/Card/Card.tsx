@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 
 import styled from "styled-components";
 
@@ -9,7 +9,7 @@ interface CardProps {
   cardIndex: number;
 }
 
-export const Card = ({ text, cardIndex }: CardProps) => {
+export const Card: FC<CardProps> = ({ text, cardIndex }) => {
   return (
     <Root>
       {text}

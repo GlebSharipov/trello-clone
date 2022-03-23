@@ -1,7 +1,8 @@
 import React, { FC, useState } from "react";
 
-import { Input } from "components/Input/Input";
 import styled from "styled-components";
+
+import { Input, Button } from "../UI";
 
 export const UserNamePopup: FC = () => {
   const [name, setName] = useState("");
@@ -16,7 +17,7 @@ export const UserNamePopup: FC = () => {
         type="text"
         placeholder="Enter your name"
       />
-      <Button type="submit">Send</Button>
+      <Button />
     </Root>
   );
 };
@@ -35,12 +36,4 @@ const Root = styled.form`
   border: 1px solid black;
   border-radius: 10px;
   padding: 40px;
-`;
-
-const Button = styled.button`
-  max-width: 100px;
-  max-height: 50px;
-  cursor: pointer;
-  margin-top: 20px;
-  padding: 5px 10px;
 `;

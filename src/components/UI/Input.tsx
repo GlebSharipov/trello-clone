@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 
 import styled from "styled-components";
 
@@ -9,7 +9,12 @@ interface InputProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-export const Input = ({ type, placeholder, value, onChange }: InputProps) => {
+export const Input: FC<InputProps> = ({
+  type,
+  placeholder,
+  value,
+  onChange,
+}) => {
   return (
     <StyledInput
       type={type}

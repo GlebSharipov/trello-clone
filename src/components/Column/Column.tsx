@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 
 import { Card } from "components/Card/Card";
 import styled from "styled-components";
@@ -8,7 +8,7 @@ interface ColumnProps {
   columnId: string;
 }
 
-export const Column = ({ textTitle, columnId }: ColumnProps) => {
+export const Column: FC<ColumnProps> = ({ textTitle, columnId }) => {
   return (
     <Root id={columnId}>
       <Title>{textTitle}</Title>
