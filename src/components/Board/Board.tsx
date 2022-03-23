@@ -6,10 +6,10 @@ import styled from "styled-components";
 export const Board: FC = () => {
   return (
     <Root>
-      <Column textTitle="TODO" columnId="1" />
-      <Column textTitle="In Progress" columnId="2" />
-      <Column textTitle="Testing" columnId="3" />
-      <Column textTitle="Done" columnId="4" />
+      <Column textTitle="TODO" id="1" />
+      <Column textTitle="In Progress" id="2" />
+      <Column textTitle="Testing" id="3" />
+      <Column textTitle="Done" id="4" />
     </Root>
   );
 };

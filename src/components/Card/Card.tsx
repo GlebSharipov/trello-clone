@@ -1,19 +1,19 @@
 import React, { FC } from "react";
 
+import { colors } from "constant/colors";
 import styled from "styled-components";
 
-import CrossImg from "./image/cross.png";
-
+import { CrossIcon } from "../icons/CrossIcon";
 interface CardProps {
   text: string;
-  cardIndex: number;
+  id: string;
 }
 
-export const Card: FC<CardProps> = ({ text, cardIndex }) => {
+export const Card: FC<CardProps> = ({ text, id }) => {
   return (
-    <Root>
+    <Root id={id}>
       {text}
-      <RemoveCard />
+      <CrossIcon />
     </Root>
   );
 };
@@ -27,15 +27,5 @@ const Root = styled.div`
   padding: 8px 4px;
   border-radius: 4px;
   margin-bottom: 2px;
-  color: white;
+  color: ${colors.white};
 `;
-
-const RemoveCard = styled.img`
-  max-width: 20px;
-  max-height: 20px;
-  cursor: pointer;
-`;
-
-RemoveCard.defaultProps = {
-  src: CrossImg,
-};

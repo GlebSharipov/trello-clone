@@ -6,6 +6,7 @@ interface InputProps {
   type: string;
   placeholder: string;
   value: string;
+  required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
@@ -14,11 +15,13 @@ export const Input: FC<InputProps> = ({
   placeholder,
   value,
   onChange,
+  required,
 }) => {
   return (
     <StyledInput
       type={type}
       value={value}
+      required={required}
       onChange={onChange}
       placeholder={placeholder}
     />
