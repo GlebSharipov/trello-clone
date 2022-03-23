@@ -2,6 +2,7 @@ import React, { FC } from "react";
 
 import { Card } from "components/Card/Card";
 import { colors } from "constant/colors";
+import { cardState } from "mock";
 import styled from "styled-components";
 
 interface ColumnProps {
@@ -14,8 +15,9 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
     <Root id={id}>
       <Title>{textTitle}</Title>
       <CardContainer>
-        <Card text="Text1" id="1" />
-        <Card text="Text2" id="2" />
+        {cardState.map((obj) => (
+          <Card key={obj.id + obj.id} text={obj.text} id={obj.id} />
+        ))}
       </CardContainer>
       <AddCardButton>+ Add a card</AddCardButton>
     </Root>

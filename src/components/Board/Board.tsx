@@ -1,15 +1,15 @@
 import React, { FC } from "react";
 
 import { Column } from "components/Column/Column";
+import { columnState } from "mock";
 import styled from "styled-components";
 
 export const Board: FC = () => {
   return (
     <Root>
-      <Column textTitle="TODO" id="1" />
-      <Column textTitle="In Progress" id="2" />
-      <Column textTitle="Testing" id="3" />
-      <Column textTitle="Done" id="4" />
+      {columnState.map((obj, index) => (
+        <Column key={index} textTitle={obj.textTitle} id={obj.id} />
+      ))}
     </Root>
   );
 };
