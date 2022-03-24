@@ -3,11 +3,14 @@ import React, { FC } from "react";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
+import { CrossIcon } from "../icons/CrossIcon";
+
 interface ModalProps {
   children: React.ReactNode;
   className?: string;
   isVisible: boolean;
   onClose?: React.MouseEventHandler;
+  isCloseButtonShowed: boolean;
 }
 
 export const Modal: FC<ModalProps> = ({
@@ -15,14 +18,16 @@ export const Modal: FC<ModalProps> = ({
   className,
   isVisible = false,
   onClose,
+  isCloseButtonShowed = false,
 }) => {
   return isVisible ? (
     <Root onClick={onClose}>
-      <StyledModal className={className}>{children}</StyledModal>
+      <StyledModal className={className}>
+        {isCloseButtonShowed ? <StyledCrossIcon /> : null}
+        {children}
+      </StyledModal>
     </Root>
-  ) : (
-    <RootNoActive />
-  );
+  ) : null;
 };
 
 const Root = styled.div`
@@ -30,17 +35,12 @@ const Root = styled.div`
   position: absolute;
   width: 100vw;
   height: 100vh;
-  transform: scale(1);
   background-color: ${COLORS.black};
   opacity: 0.4;
 `;
 
-const RootNoActive = styled.div`
-  transform: scale(0);
-`;
-
 const StyledModal = styled.form`
-  position: absolute;
+  position: relative;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -55,4 +55,11 @@ const StyledModal = styled.form`
   background-color: ${COLORS.white};
   border-radius: 10px;
   padding: 40px;
+`;
+
+const StyledCrossIcon = styled(CrossIcon)`
+  position: absolute;
+  cursor: pointer;
+  right: 6px;
+  top: 6px;
 `;

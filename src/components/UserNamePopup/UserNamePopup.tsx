@@ -8,27 +8,27 @@ import { Input, Button } from "../UI";
 
 export const UserNamePopup: FC = () => {
   const [name, setName] = useState("");
-  const [isActive, setIsActive] = useState(true);
+  const [isVisiblelUserPopup, setIsVisiblelUserPopup] = useState(true);
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
     setName(e.target.value);
 
-  const onSendName = () => {
-    if (name.length !== 0) {
-      setIsActive(false);
+  const handleSendName = () => {
+    if (name.trim().length !== 0) {
+      setIsVisiblelUserPopup(false);
     }
   };
 
   return (
-    <Modal isVisible={isActive}>
+    <Modal isCloseButtonShowed={false} isVisible={isVisiblelUserPopup}>
       <Input
         required
         value={name}
-        onChange={onChange}
+        onChange={handleChange}
         type="text"
         placeholder="Enter your name"
       />
-      <StyledButton onClick={onSendName} text="Send" type="submit" />
+      <StyledButton onClick={handleSendName} text="Send" type="submit" />
     </Modal>
   );
 };
