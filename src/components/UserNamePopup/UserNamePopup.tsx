@@ -8,7 +8,7 @@ import { Input, Button } from "../UI";
 
 export const UserNamePopup: FC = () => {
   const [name, setName] = useState("");
-  const [visble, setVisible] = useState(true);
+  const [visible, setVisible] = useState(true);
 
   const onClose = () => {
     setVisible(false);
@@ -16,7 +16,7 @@ export const UserNamePopup: FC = () => {
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
     setName(e.target.value);
 
-  return visble ? (
+  return visible ? (
     <Modal onClose={onClose}>
       <Input
         required

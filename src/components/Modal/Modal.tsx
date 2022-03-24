@@ -2,7 +2,6 @@ import React, { FC } from "react";
 
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
-
 interface ModalProps {
   children?: React.ReactNode;
   className?: string;
@@ -24,8 +23,7 @@ const Root = styled.div`
   height: 100%;
 `;
 const StyledModal = styled.form`
-  z-index: 100;
-  position: absolute;
+  position: relative;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
