@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 
 import { Modal } from "components/Modal";
-import { colors } from "constant/colors";
+import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
 import { Input, Button } from "../UI";
@@ -27,5 +27,5 @@ export const UserNamePopup: FC = () => {
 };
 
 const StyledButton = styled(Button)`
-  background-color: ${colors.gray};
+  background-color: ${COLORS.gray};
 `;

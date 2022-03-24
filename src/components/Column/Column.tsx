@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 
 import { Card } from "components/Card/Card";
-import { colors } from "constant/colors";
-import { cardState } from "mock";
+import { COLORS } from "constant/colors";
 import styled from "styled-components";
+import { cardsDefaultData } from "utils/mock";
 
 interface ColumnProps {
   textTitle: string;
@@ -15,8 +15,8 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
     <Root id={id}>
       <Title>{textTitle}</Title>
       <CardContainer>
-        {cardState.map((obj) => (
-          <Card key={obj.id + obj.id} text={obj.text} id={obj.id} />
+        {cardsDefaultData.map((cards) => (
+          <Card key={cards.id + cards.id} text={cards.text} id={cards.id} />
         ))}
       </CardContainer>
       <AddCardButton>+ Add a card</AddCardButton>
@@ -29,7 +29,7 @@ const Root = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  border: 1px solid ${colors.black};
+  border: 1px solid ${COLORS.black};
   margin-right: 5px;
   padding: 2px 5px;
 `;
@@ -46,7 +46,7 @@ const CardContainer = styled.div`
 
 const AddCardButton = styled.button`
   border: none;
-  background-color: ${colors.white};
+  background-color: ${COLORS.white};
   cursor: pointer;
   text-align: start;
   font-size: 16px;

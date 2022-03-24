@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { colors } from "constant/colors";
+import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
 interface ModalProps {
@@ -23,7 +23,7 @@ const Root = styled.form`
   justify-content: center;
   max-width: 350px;
   max-height: 250px;
-  border: 1px solid ${colors.black};
+  border: 1px solid ${COLORS.black};
   border-radius: 10px;
   padding: 40px;
 `;

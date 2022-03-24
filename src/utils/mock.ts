@@ -1,9 +1,9 @@
-interface columnType {
+interface Column {
   id: string;
   textTitle: string;
 }
 
-export let columnState: columnType[] = [
+export const columnsDefaultData: Column[] = [
   {
     id: "0",
     textTitle: "TODO",
@@ -22,12 +22,12 @@ export let columnState: columnType[] = [
   },
 ];
 
-interface cardType {
+interface Card {
   id: string;
   text: string;
 }
 
-export let cardState: cardType[] = [
+export const cardsDefaultData: Card[] = [
   {
     id: "0",
     text: "Text1",

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { colors } from "constant/colors";
+import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
 import { CrossIcon } from "../icons/CrossIcon";
@@ -11,7 +11,7 @@ interface CardProps {
 
 export const Card: FC<CardProps> = ({ text, id }) => {
   return (
-    <Root id={id}>
+    <Root>
       {text}
       <CrossIcon />
     </Root>
@@ -23,9 +23,9 @@ const Root = styled.div`
   align-items: center;
   justify-content: space-between;
   max-width: 335px;
-  background-color: gray;
+  background-color: ${COLORS.gray};
   padding: 8px 4px;
   border-radius: 4px;
   margin-bottom: 2px;
-  color: ${colors.white};
+  color: ${COLORS.white};
 `;
