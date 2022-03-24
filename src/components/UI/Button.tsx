@@ -6,15 +6,17 @@ interface ButtonProps {
   className?: string;
   type: "button" | "submit" | "reset" | undefined;
   text: string;
+  onClick: React.MouseEventHandler;
 }
 
 export const Button: FC<ButtonProps> = ({
   className,
   type = "button",
   text,
+  onClick,
 }) => {
   return (
-    <Root className={className} type={type}>
+    <Root onClick={onClick} className={className} type={type}>
       {text}
     </Root>
   );

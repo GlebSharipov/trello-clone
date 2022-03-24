@@ -10,13 +10,13 @@ interface ColumnProps {
   id: string;
 }
 
-export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
+export const Column: FC<ColumnProps> = ({ textTitle }) => {
   return (
-    <Root id={id}>
+    <Root>
       <Title>{textTitle}</Title>
       <CardContainer>
-        {cardsDefaultData.map((cards) => (
-          <Card key={cards.id + cards.id} text={cards.text} id={cards.id} />
+        {cardsDefaultData.map((card) => (
+          <Card key={card.id} text={card.text} id={card.id} />
         ))}
       </CardContainer>
       <AddCardButton>+ Add a card</AddCardButton>

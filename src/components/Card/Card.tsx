@@ -4,12 +4,13 @@ import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
 import { CrossIcon } from "../icons/CrossIcon";
+
 interface CardProps {
   text: string;
   id: string;
 }
 
-export const Card: FC<CardProps> = ({ text, id }) => {
+export const Card: FC<CardProps> = ({ text }) => {
   return (
     <Root>
       {text}
