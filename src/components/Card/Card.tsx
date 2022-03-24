@@ -13,7 +13,7 @@ export const Card: FC<CardProps> = ({ text, id }) => {
   return (
     <Root>
       {text}
-      <CrossIcon />
+      <StyledCrossIcon />
     </Root>
   );
 };
@@ -28,4 +28,8 @@ const Root = styled.div`
   border-radius: 4px;
   margin-bottom: 2px;
   color: ${COLORS.white};
+`;
+
+const StyledCrossIcon = styled(CrossIcon)`
+  cursor: pointer;
 `;
