@@ -6,21 +6,23 @@ import styled from "styled-components";
 
 import { Input, Button } from "../UI";
 
-export const UserNamePopup: FC = () => {
+interface UserNamePopupProps {
+  onUserNameChange: (name: string) => void;
+  isVisible: boolean;
+}
+
+export const UserNamePopup: FC<UserNamePopupProps> = ({
+  onUserNameChange,
+  isVisible,
+}) => {
   const [name, setName] = useState("");
-  const [isVisiblelUserPopup, setIsVisiblelUserPopup] = useState(true);
+  const trimmedName = name.trim();
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
     setName(e.target.value);
 
-  const handleSendName = () => {
-    if (name.trim().length !== 0) {
-      setIsVisiblelUserPopup(false);
-    }
-  };
-
   return (
-    <Modal isCloseButtonShowed={false} isVisible={isVisiblelUserPopup}>
+    <Modal isCloseButtonShowed={false} isVisible={isVisible}>
       <Input
         required
         value={name}
@@ -28,7 +30,11 @@ export const UserNamePopup: FC = () => {
         type="text"
         placeholder="Enter your name"
       />
-      <StyledButton onClick={handleSendName} text="Send" type="submit" />
+      <StyledButton
+        onClick={() => onUserNameChange(trimmedName)}
+        text="Send"
+        type="submit"
+      />
     </Modal>
   );
 };

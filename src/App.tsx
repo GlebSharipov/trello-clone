@@ -1,13 +1,18 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 
 import styled from "styled-components";
 
 import { UserNamePopup, Board } from "./components";
 
 const App: FC = () => {
+  const [authorName, setAuthorName] = useState("");
+
   return (
     <Root>
-      <UserNamePopup />
+      <UserNamePopup
+        isVisible={authorName.length === 0}
+        onUserNameChange={setAuthorName}
+      />
       <Board />
     </Root>
   );

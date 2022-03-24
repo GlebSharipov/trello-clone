@@ -16,14 +16,14 @@ interface ModalProps {
 export const Modal: FC<ModalProps> = ({
   children,
   className,
-  isVisible = false,
+  isVisible = true,
   onClose,
   isCloseButtonShowed = false,
 }) => {
   return isVisible ? (
     <Root onClick={onClose}>
       <StyledModal className={className}>
-        {isCloseButtonShowed ? <StyledCrossIcon /> : null}
+        {isCloseButtonShowed && <StyledCrossIcon />}
         {children}
       </StyledModal>
     </Root>
