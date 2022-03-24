@@ -6,7 +6,6 @@ export const CrossIcon = (props: SVGProps<SVGSVGElement>) => (
     width={12}
     height={12}
     fill="black"
-    cursor="pointer"
     viewBox="0 0 94.926 94.926"
     xmlSpace="preserve"
     {...props}

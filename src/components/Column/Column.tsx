@@ -28,7 +28,7 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%;
+  max-width: 350px;
   border: 1px solid ${COLORS.black};
   margin-right: 5px;
   padding: 2px 5px;
@@ -40,8 +40,7 @@ const Title = styled.h2`
 `;
 
 const CardContainer = styled.div`
-  max-width: 340px;
-  flex: 1;
+  width: 340px;
 `;
 
 const AddCardButton = styled.button`

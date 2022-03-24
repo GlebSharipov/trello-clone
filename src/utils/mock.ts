@@ -1,7 +1,4 @@
-interface Column {
-  id: string;
-  textTitle: string;
-}
+import { Column, Card } from "types/index";
 
 export const columnsDefaultData: Column[] = [
   {
@@ -21,11 +18,6 @@ export const columnsDefaultData: Column[] = [
     textTitle: "Done",
   },
 ];
-
-interface Card {
-  id: string;
-  text: string;
-}
 
 export const cardsDefaultData: Card[] = [
   {

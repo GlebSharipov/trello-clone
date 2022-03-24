@@ -4,12 +4,18 @@ import styled from "styled-components";
 
 interface ButtonProps {
   className?: string;
+  type: "button" | "submit" | "reset" | undefined;
+  text: string;
 }
 
-export const Button: FC<ButtonProps> = ({ className }) => {
+export const Button: FC<ButtonProps> = ({
+  className,
+  type = "button",
+  text,
+}) => {
   return (
-    <Root className={className} type="submit">
-      Send
+    <Root className={className} type={type}>
+      {text}
     </Root>
   );
 };
