@@ -2,13 +2,14 @@ import React, { FC, useState } from "react";
 
 import styled from "styled-components";
 
-import { UserNamePopup, Board } from "./components";
+import { UserNamePopup, Board, Header } from "./components";
 
 const App: FC = () => {
   const [authorName, setAuthorName] = useState("");
 
   return (
     <Root>
+      <Header>{authorName}</Header>
       {authorName ? (
         <Board />
       ) : (

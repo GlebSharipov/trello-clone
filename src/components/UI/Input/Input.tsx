@@ -5,11 +5,12 @@ import styled from "styled-components";
 
 interface InputProps {
   type: string;
-  placeholder: string;
-  value: string;
+  placeholder?: string;
+  value?: string;
   className?: string;
   required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 export const Input: FC<InputProps> = ({
@@ -17,6 +18,7 @@ export const Input: FC<InputProps> = ({
   placeholder,
   value,
   onChange,
+  onBlur,
   required,
   className,
 }) => {
@@ -24,9 +26,11 @@ export const Input: FC<InputProps> = ({
     <StyledInput
       type={type}
       value={value}
+      autoFocus
       className={className}
       required={required}
       onChange={onChange}
+      onBlur={onBlur}
       placeholder={placeholder}
     />
   );
