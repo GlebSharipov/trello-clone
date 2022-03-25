@@ -10,10 +10,7 @@ interface UserNamePopupProps {
   isVisible: boolean;
 }
 
-export const UserNamePopup: FC<UserNamePopupProps> = ({
-  onUserNameChange,
-  isVisible,
-}) => {
+export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
   const [name, setName] = useState("");
   const trimmedName = name.trim();
 
@@ -21,7 +18,7 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({
     setName(e.target.value);
 
   return (
-    <Modal isVisible={isVisible}>
+    <Modal>
       <Input
         required
         value={name}

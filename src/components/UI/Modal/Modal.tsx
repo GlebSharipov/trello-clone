@@ -8,7 +8,7 @@ import { CrossIcon } from "../../icons/CrossIcon";
 interface ModalProps {
   children: React.ReactNode;
   className?: string;
-  isVisible: boolean;
+  isVisible?: boolean;
   onClose?: React.MouseEventHandler;
   isCloseButtonShowed?: boolean;
 }

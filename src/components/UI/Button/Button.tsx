@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 
+import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
 interface ButtonProps {
@@ -27,4 +28,11 @@ const Root = styled.button`
   cursor: pointer;
   margin-top: 20px;
   padding: 5px 10px;
+  &:hover {
+    background-color: ${COLORS.green};
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0px 0px 4px ${COLORS.red};
+  }
 `;

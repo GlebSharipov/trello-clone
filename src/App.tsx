@@ -9,11 +9,14 @@ const App: FC = () => {
 
   return (
     <Root>
-      <UserNamePopup
-        isVisible={authorName.length === 0}
-        onUserNameChange={setAuthorName}
-      />
-      <Board />
+      {authorName ? (
+        <Board />
+      ) : (
+        <UserNamePopup
+          isVisible={authorName.length === 0}
+          onUserNameChange={setAuthorName}
+        />
+      )}
     </Root>
   );
 };

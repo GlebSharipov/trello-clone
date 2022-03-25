@@ -36,4 +36,8 @@ const StyledInput = styled.input`
   max-width: 250px;
   font-size: 25px;
   border: 1px solid ${COLORS.black};
+  &:focus {
+    outline: none;
+    box-shadow: 0px 0px 4px ${COLORS.red};
+  }
 `;
