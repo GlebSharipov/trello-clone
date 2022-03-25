@@ -3,14 +3,14 @@ import React, { FC } from "react";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
-import { CrossIcon } from "../icons/CrossIcon";
+import { CrossIcon } from "../../icons/CrossIcon";
 
 interface ModalProps {
   children: React.ReactNode;
   className?: string;
   isVisible: boolean;
   onClose?: React.MouseEventHandler;
-  isCloseButtonShowed: boolean;
+  isCloseButtonShowed?: boolean;
 }
 
 export const Modal: FC<ModalProps> = ({

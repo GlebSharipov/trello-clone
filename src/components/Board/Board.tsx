@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { Column } from "components/Column/Column";
+import { Column } from "components";
 import styled from "styled-components";
 import { columnsDefaultData } from "utils/mock";
 

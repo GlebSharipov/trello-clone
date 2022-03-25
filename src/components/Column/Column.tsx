@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { Card } from "components/Card/Card";
+import { Card } from "components";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
 import { cardsDefaultData } from "utils/mock";

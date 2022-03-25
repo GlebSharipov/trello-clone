@@ -2,6 +2,7 @@ import React, { FC } from "react";
 
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
+
 interface InputProps {
   type: string;
   placeholder: string;

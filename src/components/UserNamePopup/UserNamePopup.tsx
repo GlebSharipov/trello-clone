@@ -1,10 +1,9 @@
 import React, { FC, useState } from "react";
 
-import { Modal } from "components/Modal";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
-import { Input, Button } from "../UI";
+import { Input, Button, Modal } from "../UI";
 
 interface UserNamePopupProps {
   onUserNameChange: (name: string) => void;
@@ -22,7 +21,7 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({
     setName(e.target.value);
 
   return (
-    <Modal isCloseButtonShowed={false} isVisible={isVisible}>
+    <Modal isVisible={isVisible}>
       <Input
         required
         value={name}
