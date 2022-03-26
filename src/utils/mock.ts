@@ -23,16 +23,7 @@ export const columnsDefaultData: Column[] = [
   {
     id: "1",
     textTitle: "TODO",
-    cards: [
-      {
-        id: "0",
-        text: "Text1",
-      },
-      {
-        id: "1",
-        text: "Text9",
-      },
-    ],
+    cards: cardsDefaultData,
   },
   {
     id: "2",
