@@ -24,11 +24,12 @@ const Root = styled.div`
   align-items: center;
   justify-content: space-between;
   max-width: 335px;
-  background-color: ${COLORS.gray};
-  padding: 8px 4px;
+  background-color: ${COLORS.white};
+  padding: 8px 8px;
   border-radius: 4px;
-  margin-bottom: 2px;
-  color: ${COLORS.white};
+  margin-bottom: 8px;
+  word-break: break-all;
+  color: ${COLORS.black};
 `;
 
 const StyledCrossIcon = styled(CrossIcon)`

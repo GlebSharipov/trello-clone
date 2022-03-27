@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import { Column } from "components";
 import styled from "styled-components";
@@ -16,7 +16,6 @@ export const Board: FC = () => {
 
 const Root = styled.div`
   display: flex;
-  max-width: 1440px;
-  height: 100%;
-  margin: 0 auto;
+  width: 100%;
+  padding: 0 30px;
 `;

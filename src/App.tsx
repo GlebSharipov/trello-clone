@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 
+import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
 import { UserNamePopup, Board, Header } from "./components";
@@ -9,7 +10,7 @@ const App: FC = () => {
 
   return (
     <Root>
-      <Header>{authorName}</Header>
+      <Header authorName={authorName} />
       {authorName ? (
         <Board />
       ) : (
@@ -24,6 +25,7 @@ const App: FC = () => {
 
 const Root = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  background-color: ${COLORS.orange};
 `;
 export default App;
