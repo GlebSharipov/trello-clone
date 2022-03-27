@@ -14,23 +14,41 @@ export const Card: FC<CardProps> = ({ text }) => {
   return (
     <Root>
       {text}
-      <StyledCrossIcon />
+      <CrossButton>
+        <StyledCrossIcon />
+      </CrossButton>
     </Root>
   );
 };
 
-const Root = styled.div`
+const Root = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: 335px;
-  background-color: ${COLORS.gray};
-  padding: 8px 4px;
+  background-color: ${COLORS.white};
+  box-shadow: 0 1px 0 ${COLORS.dark_gray};
+  padding: 8px 8px;
   border-radius: 4px;
-  margin-bottom: 2px;
-  color: ${COLORS.white};
+  margin-bottom: 8px;
+  word-break: break-all;
+  cursor: pointer;
+  color: ${COLORS.black};
+  &:hover {
+    background-color: ${COLORS.gray};
+  }
+`;
+
+const CrossButton = styled.button`
+  margin-left: 5px;
+  &:focus {
+    transform: translateY(-1px);
+  }
 `;
 
 const StyledCrossIcon = styled(CrossIcon)`
-  cursor: pointer;
+  fill: ${COLORS.dark_gray};
+  &:hover {
+    fill: ${COLORS.black};
+  }
 `;

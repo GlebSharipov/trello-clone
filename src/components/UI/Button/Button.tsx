@@ -28,11 +28,12 @@ const Root = styled.button`
   cursor: pointer;
   margin-top: 20px;
   padding: 5px 10px;
+  background-color: ${COLORS.blue};
   &:hover {
-    background-color: ${COLORS.green};
+    background-color: ${COLORS.blue};
   }
   &:focus {
     outline: none;
-    box-shadow: 0px 0px 4px ${COLORS.red};
+    box-shadow: 0px 0px 4px ${COLORS.dark_blue};
   }
 `;
