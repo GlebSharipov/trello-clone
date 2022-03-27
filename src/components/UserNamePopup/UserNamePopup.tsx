@@ -37,6 +37,7 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
 
 const StyledButton = styled(Button)`
   background-color: ${COLORS.gray};
+  border-radius: 5px;
   &:hover {
     background-color: ${COLORS.dark_orange};
   }

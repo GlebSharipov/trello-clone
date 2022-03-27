@@ -50,6 +50,12 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
     setIsCardTitleEditable(false);
   };
 
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.code === "Enter") {
+      handleAddCard();
+    }
+  };
+
   return (
     <Root>
       <InputTitle textTitle={textTitle} />
@@ -66,6 +72,7 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
       ) : (
         <Container>
           <InputAddCard
+            onKeyDown={keyDownHandler}
             autoFocus
             onBlur={handleBlur}
             value={cardText}

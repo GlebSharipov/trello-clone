@@ -11,6 +11,7 @@ interface InputProps {
   required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onBlur?: React.ChangeEventHandler<HTMLInputElement>;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 }
 
 export const Input: FC<InputProps> = ({
@@ -19,6 +20,7 @@ export const Input: FC<InputProps> = ({
   value,
   onChange,
   onBlur,
+  onKeyDown,
   required,
   className,
 }) => {
@@ -31,6 +33,7 @@ export const Input: FC<InputProps> = ({
       required={required}
       onChange={onChange}
       onBlur={onBlur}
+      onKeyDown={onKeyDown}
       placeholder={placeholder}
     />
   );

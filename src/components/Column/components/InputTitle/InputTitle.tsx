@@ -27,10 +27,17 @@ export const InputTitle: FC<InputTitleProps> = ({ textTitle }) => {
     }
   };
 
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === "Enter") {
+      setIsColumnTitleEditable(false);
+    }
+  };
+
   return (
     <Root>
       {isColumnTitleEditable ? (
         <StyledInput
+          onKeyDown={keyDownHandler}
           onBlur={handleBlur}
           onChange={handleChangeColumn}
           value={nameColumn}
