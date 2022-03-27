@@ -35,7 +35,7 @@ const Root = styled.div`
   position: absolute;
   width: 100vw;
   height: 100vh;
-  background-color: ${COLORS.black};
+  background-color: ${COLORS.orange};
   opacity: 0.4;
 `;
 

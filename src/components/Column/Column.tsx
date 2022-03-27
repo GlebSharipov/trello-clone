@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 
 import { Card } from "components";
-import { Input, Button } from "components/UI";
+import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
 import { cardsDefaultData } from "utils/mock";
@@ -21,9 +21,11 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
   const [cards, setCards] = useState(cardsDefaultData);
   const trimmedText = cardText.trim();
 
-  const handleChangeText: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+  const handleChangeText: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    e
+  ) => {
     setCardText(e.target.value);
-
+  };
   const toggleIsInputVisible = () => {
     if (!isCardTitleEditable) {
       setIsCardTitleEditable(true);
@@ -39,6 +41,13 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
       setCardText("");
       setIsCardTitleEditable(false);
     }
+  };
+
+  const handleBlur: React.ChangeEventHandler<HTMLTextAreaElement> = () => {
+    if (trimmedText) {
+      handleAddCard();
+    }
+    setIsCardTitleEditable(false);
   };
 
   return (
@@ -57,8 +66,9 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
       ) : (
         <Container>
           <InputAddCard
+            autoFocus
+            onBlur={handleBlur}
             value={cardText}
-            type="text"
             onChange={handleChangeText}
           />
           <ButtonContainer>
@@ -67,7 +77,9 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
               text="Add card"
               onClick={handleAddCard}
             />
-            <StyledCrossIcon onClick={toggleIsInputVisible} />
+            <ButtonCross onClick={toggleIsInputVisible}>
+              <StyledCrossIcon />
+            </ButtonCross>
           </ButtonContainer>
         </Container>
       )}
@@ -75,20 +87,18 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
   );
 };
 
-const Root = styled.div`
+const Root = styled.li`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   background-color: ${COLORS.gray};
   max-width: 350px;
   border-radius: 5px;
-  margin-right: 5px;
+  margin-right: 10px;
   padding: 2px 5px;
 `;
 
-const CardContainer = styled.div`
+const CardContainer = styled.ul`
   width: 300px;
-  flex: 1;
 `;
 
 const Container = styled.div`
@@ -103,21 +113,29 @@ const AddCardButton = styled.button`
   text-align: start;
   font-size: 18px;
   margin-top: 10px;
+  border-radius: 4px;
   padding: 5px;
+  &:hover {
+    background-color: ${COLORS.lighte_gray};
+    color: ${COLORS.black};
+  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-
   align-items: center;
-  margin-top: 10px;
+  margin: 10px 0;
 `;
 
-const InputAddCard = styled(Input)`
+const InputAddCard = styled.textarea`
   font-size: 16px;
   width: 100%;
+  background-color: ${COLORS.white};
   padding-bottom: 50px;
-  word-break: break-all;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  resize: none;
+  box-shadow: 0 1px 0 ${COLORS.dark_gray};
 `;
 
 const StyledButton = styled(Button)`
@@ -129,7 +147,18 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const ButtonCross = styled.button`
+  width: 30px;
+  margin-left: 10px;
+  &:focus {
+    transform: translateY(-1px);
+  }
+`;
 const StyledCrossIcon = styled(CrossIcon)`
   cursor: pointer;
   width: 30px;
+  fill: ${COLORS.dark_gray};
+  &:hover {
+    fill: ${COLORS.black};
+  }
 `;

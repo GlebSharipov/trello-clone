@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 
 import { Input } from "components/UI";
+import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
 interface InputTitleProps {
@@ -29,7 +30,7 @@ export const InputTitle: FC<InputTitleProps> = ({ textTitle }) => {
   return (
     <Root>
       {isColumnTitleEditable ? (
-        <Input
+        <StyledInput
           onBlur={handleBlur}
           onChange={handleChangeColumn}
           value={nameColumn}
@@ -43,11 +44,19 @@ export const InputTitle: FC<InputTitleProps> = ({ textTitle }) => {
 };
 
 const Root = styled.div`
-  width: 50%;
+  display: flex;
+  width: 100%;
+  padding: 8px;
 `;
 
 const Title = styled.h2`
   cursor: pointer;
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-size: 18px;
+  margin-bottom: 12px;
+`;
+
+const StyledInput = styled(Input)`
+  border: 2px solid ${COLORS.dark_blue};
+  border-radius: 3px;
+  margin-bottom: 6px;
 `;

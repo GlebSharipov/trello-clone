@@ -27,5 +27,6 @@ const Root = styled.div`
   width: 100%;
   height: 100vh;
   background-color: ${COLORS.orange};
+  overflow: auto;
 `;
 export default App;

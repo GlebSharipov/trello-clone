@@ -14,8 +14,9 @@ export const Board: FC = () => {
   );
 };
 
-const Root = styled.div`
+const Root = styled.ul`
   display: flex;
-  width: 100%;
+  margin-top: 80px;
+  align-items: flex-start;
   padding: 0 30px;
 `;

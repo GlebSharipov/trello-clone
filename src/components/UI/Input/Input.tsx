@@ -37,12 +37,11 @@ export const Input: FC<InputProps> = ({
 };
 
 const StyledInput = styled.input`
-  max-width: 250px;
-  font-size: 25px;
+  font-size: 18px;
   border: 1px solid ${COLORS.black};
   background-color: ${COLORS.white};
   &:focus {
     outline: none;
-    box-shadow: 0px 0px 4px ${COLORS.red};
+    box-shadow: 0px 0px 4px ${COLORS.blue};
   }
 `;

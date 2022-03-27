@@ -19,7 +19,7 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
 
   return (
     <Modal>
-      <Input
+      <StyledInput
         required
         value={name}
         onChange={handleChange}
@@ -37,4 +37,15 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
 
 const StyledButton = styled(Button)`
   background-color: ${COLORS.gray};
+  &:hover {
+    background-color: ${COLORS.dark_orange};
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0px 0px 4px ${COLORS.orange};
+  }
+`;
+
+const StyledInput = styled(Input)`
+  font-size: 25px;
 `;

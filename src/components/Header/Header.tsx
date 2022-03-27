@@ -17,13 +17,13 @@ export const Header: FC<HeaderProps> = ({ authorName }) => {
 };
 
 const Root = styled.header`
+  position: fixed;
   display: flex;
   justify-content: space-between;
   width: 100%;
   background-color: ${COLORS.dark_orange};
   padding: 10px 30px;
   font-size: 25px;
-  margin-bottom: 10px;
   color: ${COLORS.white};
 `;
 
