@@ -284,7 +284,7 @@ const CommentsTitle = styled.h2`
 const CommentsFakeText = styled.div`
   cursor: pointer;
   width: 100%;
-  height: 50px;
+  padding-bottom: 50px;
   font-size: 16px;
   padding: 10px;
   border-radius: 4px;
@@ -296,7 +296,7 @@ const CommentsFakeText = styled.div`
 
 const AddCommentsText = styled.textarea`
   width: 100%;
-  height: 100px;
+  padding-bottom: 100px;
   font-size: 16px;
   padding: 10px;
   border-radius: 4px;
@@ -318,7 +318,7 @@ const Comment = styled.div`
 `;
 const TextComment = styled.textarea`
   width: 90%;
-  height: 50px;
+  margin-bottom: 5px;
   font-size: 16px;
   padding: 10px;
   border-radius: 4px;
