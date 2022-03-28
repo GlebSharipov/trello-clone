@@ -10,9 +10,10 @@ export interface Comment {
 export interface Card {
   id: string;
   text: string;
-  description: Description[];
+  description: Description;
   comments: Comment[];
 }
+
 export interface Column {
   id: string;
   textTitle: string;

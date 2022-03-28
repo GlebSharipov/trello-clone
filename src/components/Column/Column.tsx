@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 
 import { Card, CardPopup } from "components";
 import { Button } from "components/UI";
@@ -27,6 +27,7 @@ export const Column: FC<ColumnProps> = ({ textTitle }) => {
   ) => {
     setCardText(e.target.value);
   };
+
   const toggleIsInputVisible = () => {
     if (!isCardTitleEditable) {
       setIsCardTitleEditable(true);
@@ -56,14 +57,33 @@ export const Column: FC<ColumnProps> = ({ textTitle }) => {
     setIsCardTitleEditable(false);
   };
 
-  const keyDownHandler = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handeleKeyDownEnter = (
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
     if (event.code === "Enter") {
       handleAddCard();
     }
   };
 
-  const handleVisiblePopup = () => {
-    setIsVisibleCardPopup(true);
+  const handleKeyDownEsc = ({ key }: KeyboardEvent) => {
+    switch (key) {
+      case "Escape":
+        setIsVisibleCardPopup(false);
+        break;
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDownEsc);
+    return () => document.removeEventListener("keydown", handleKeyDownEsc);
+  });
+
+  const toggleIsVisiblePopup = () => {
+    if (!isVisibleCardPopup) {
+      setIsVisibleCardPopup(true);
+    } else {
+      setIsVisibleCardPopup(false);
+    }
   };
 
   return (
@@ -72,7 +92,7 @@ export const Column: FC<ColumnProps> = ({ textTitle }) => {
       <CardContainer>
         {cards.map((card) => (
           <Card
-            onClick={handleVisiblePopup}
+            onClick={toggleIsVisiblePopup}
             key={card.id}
             text={card.text}
             id={card.id}
@@ -87,7 +107,7 @@ export const Column: FC<ColumnProps> = ({ textTitle }) => {
       ) : (
         <Container>
           <InputAddCard
-            onKeyDown={keyDownHandler}
+            onKeyDown={handeleKeyDownEnter}
             autoFocus
             onBlur={handleBlur}
             value={cardText}
@@ -105,7 +125,11 @@ export const Column: FC<ColumnProps> = ({ textTitle }) => {
           </ButtonContainer>
         </Container>
       )}
-      <CardPopup isVisible={isVisibleCardPopup} />
+
+      <CardPopup
+        isVisible={isVisibleCardPopup}
+        onClose={toggleIsVisiblePopup}
+      />
     </Root>
   );
 };
@@ -177,6 +201,7 @@ const ButtonCross = styled.button`
     transform: translateY(-1px);
   }
 `;
+
 const StyledCrossIcon = styled(CrossIcon)`
   cursor: pointer;
   width: 30px;

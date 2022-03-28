@@ -1,10 +1,9 @@
 import React, { FC, useState } from "react";
 
+import { Comments } from "components";
 import { Modal, Button } from "components/UI";
-import { COLORS } from "constant/colors";
+import { COLORS, ZINDEX } from "constant";
 import styled from "styled-components";
-import { commentsData, descriptionData } from "utils/mock";
-import { v4 as uuidv4 } from "uuid";
 
 import { CrossIcon } from "../icons/CrossIcon";
 
@@ -14,41 +13,15 @@ interface CardPopupProps {
   textCard?: string;
   comments?: string;
   isVisible: boolean;
+  onClose: React.MouseEventHandler;
 }
 
-export const CardPopup: FC<CardPopupProps> = ({ isVisible = false }) => {
-  const [comments, setComments] = useState(commentsData);
-  const [visiblePopup, setVisiblePopup] = useState(true);
+export const CardPopup: FC<CardPopupProps> = ({ onClose, isVisible }) => {
   const [isDescriptionEditable, setIsDescriptionEditable] = useState(false);
   const [descriptionText, setDescriptionText] = useState("");
-  const [isCommentsEditable, setIsCommentsEditable] = useState(false);
-  const [commentText, setCommentText] = useState("");
-  const trimmedTextComment = commentText.trim();
-
-  const handleAddComment = () => {
-    const newComment = {
-      commentText: trimmedTextComment,
-      id: uuidv4(),
-    };
-    if (trimmedTextComment) {
-      setComments((prevComment) => [...prevComment, newComment]);
-      setCommentText("");
-      setIsCommentsEditable(false);
-    }
-  };
-
-  const keyDownHandler = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.code === "Enter") {
-      handleAddComment();
-    }
-  };
 
   const handleDescriptionEditable = () => {
     setIsDescriptionEditable(true);
-  };
-
-  const handleCommentsEditable = () => {
-    setIsCommentsEditable(true);
   };
 
   const handleChangeTextDescription: React.ChangeEventHandler<
@@ -57,106 +30,79 @@ export const CardPopup: FC<CardPopupProps> = ({ isVisible = false }) => {
     setDescriptionText(e.target.value);
   };
 
-  const handleChangeTextComment: React.ChangeEventHandler<
-    HTMLTextAreaElement
-  > = (e) => {
-    setCommentText(e.target.value);
-  };
-
   const handleBlurDescription: React.ChangeEventHandler<
     HTMLTextAreaElement
   > = () => {
     setIsDescriptionEditable(false);
   };
 
-  const handleVisiblePopup = () => {
-    setVisiblePopup(false);
-  };
-
-  const handleBlurComments: React.ChangeEventHandler<
-    HTMLTextAreaElement
-  > = () => {
-    if (trimmedTextComment) {
-      handleAddComment();
-    }
-    setIsCommentsEditable(false);
-  };
-
-  return isVisible ? (
-    <Root isVisible={visiblePopup} onClose={handleVisiblePopup}>
-      <PopupHeader>
-        <Container>
-          <CardTitle>asdasd</CardTitle>
-          <ColumnName>in list: NAME COLUMN </ColumnName>
-        </Container>
-        <AuthorName>Gleb</AuthorName>
-        <ButtonCross onClick={handleVisiblePopup}>
-          <StyledCrossIcon />
-        </ButtonCross>
-      </PopupHeader>
-      <Description>
-        <DescriptionTitle>Description</DescriptionTitle>
-        {!isDescriptionEditable ? (
-          <DescriptionFakeText onClick={handleDescriptionEditable}>
-            Add a more detailed description...
-          </DescriptionFakeText>
-        ) : (
-          <ContainerDescription>
-            <DescriptionText
-              value={descriptionText}
-              onBlur={handleBlurDescription}
-              onChange={handleChangeTextDescription}
-              autoFocus
-              placeholder="Add a more detailed description..."
-            ></DescriptionText>
-            <ButtonContainer>
-              <StyledButton text="Save" type="submit" onClick={() => {}} />
-              <ButtonCross onClick={handleVisiblePopup}>
+  return (
+    <>
+      {isVisible && (
+        <Root>
+          <StyledModal>
+            <PopupHeader>
+              <Container>
+                <CardTitle>asdasd</CardTitle>
+                <ColumnName>in list: NAME COLUMN </ColumnName>
+              </Container>
+              <AuthorName>Gleb</AuthorName>
+              <ButtonCross onClick={onClose}>
                 <StyledCrossIcon />
               </ButtonCross>
-            </ButtonContainer>
-          </ContainerDescription>
-        )}
-      </Description>
-      <Comments>
-        <CommentsTitle>Comments</CommentsTitle>
-        {!isCommentsEditable ? (
-          <CommentsFakeText onClick={handleCommentsEditable}>
-            Write a comment...
-          </CommentsFakeText>
-        ) : (
-          <CommentsContainer>
-            <AddCommentsText
-              value={commentText}
-              onKeyDown={keyDownHandler}
-              autoFocus
-              onBlur={handleBlurComments}
-              onChange={handleChangeTextComment}
-              placeholder="Write a comment..."
-            ></AddCommentsText>
-            <ButtonContainer onClick={(e) => e.stopPropagation()}>
-              <StyledButton
-                text="Save"
-                type="submit"
-                onClick={handleAddComment}
-              />
-            </ButtonContainer>
-          </CommentsContainer>
-        )}
-      </Comments>
-      <CommentsContainer>
-        {comments.map((comment) => (
-          <Comment key={comment.id}>
-            <AuthorName>Gleb</AuthorName>
-            <TextComment value={comment.commentText} />
-          </Comment>
-        ))}
-      </CommentsContainer>
-    </Root>
-  ) : null;
+            </PopupHeader>
+            <Description>
+              <DescriptionTitle>Description</DescriptionTitle>
+              {!isDescriptionEditable ? (
+                <DescriptionFakeText onClick={handleDescriptionEditable}>
+                  Add a more detailed description...
+                </DescriptionFakeText>
+              ) : (
+                <ContainerDescription>
+                  <DescriptionText
+                    value={descriptionText}
+                    onBlur={handleBlurDescription}
+                    onChange={handleChangeTextDescription}
+                    autoFocus
+                    placeholder="Add a more detailed description..."
+                  ></DescriptionText>
+                  <ButtonContainer>
+                    <StyledButton
+                      text="Save"
+                      type="submit"
+                      onClick={() => {}}
+                    />
+                    <ButtonCross onClick={() => {}}>
+                      <StyledCrossIcon />
+                    </ButtonCross>
+                  </ButtonContainer>
+                </ContainerDescription>
+              )}
+            </Description>
+            <Comments />
+          </StyledModal>
+        </Root>
+      )}
+    </>
+  );
 };
 
-const Root = styled(Modal)`
+const Root = styled.div`
+  z-index: ${ZINDEX.zIndex10};
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: ${COLORS.transparent_black};
+  align-items: flex-start;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  position: fixed;
+`;
+
+const StyledModal = styled(Modal)`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -223,7 +169,6 @@ const DescriptionTitle = styled.h2`
 
 const DescriptionFakeText = styled.div`
   cursor: pointer;
-  width: 90%;
   height: 50px;
   font-size: 16px;
   padding: 10px;
@@ -235,7 +180,6 @@ const DescriptionFakeText = styled.div`
 `;
 
 const DescriptionText = styled.textarea`
-  width: 90%;
   height: 100px;
   font-size: 16px;
   padding: 10px;
@@ -251,7 +195,6 @@ const ContainerDescription = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 100%;
 `;
 
 const ButtonContainer = styled.div`
@@ -269,61 +212,4 @@ const StyledButton = styled(Button)`
   &:hover {
     background-color: ${COLORS.dark_blue};
   }
-`;
-
-const Comments = styled.div`
-  width: 90%;
-  max-height: 180px;
-`;
-
-const CommentsTitle = styled.h2`
-  font-size: 20px;
-  margin-bottom: 20px;
-`;
-
-const CommentsFakeText = styled.div`
-  cursor: pointer;
-  width: 100%;
-  padding-bottom: 50px;
-  font-size: 16px;
-  padding: 10px;
-  border-radius: 4px;
-  background-color: ${COLORS.gray};
-  &:hover {
-    background-color: ${COLORS.lighte_gray};
-  }
-`;
-
-const AddCommentsText = styled.textarea`
-  width: 100%;
-  padding-bottom: 100px;
-  font-size: 16px;
-  padding: 10px;
-  border-radius: 4px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  resize: none;
-  border: 2px solid ${COLORS.blue};
-  background-color: ${COLORS.white};
-`;
-
-const CommentsContainer = styled.div`
-  width: 100%;
-  margin-top: 20px;
-  overflow-x: auto;
-`;
-
-const Comment = styled.div`
-  width: 100%;
-`;
-const TextComment = styled.textarea`
-  width: 90%;
-  margin-bottom: 5px;
-  font-size: 16px;
-  padding: 10px;
-  border-radius: 4px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  resize: none;
-  background-color: ${COLORS.gray};
 `;

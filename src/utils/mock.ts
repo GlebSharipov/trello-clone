@@ -1,8 +1,6 @@
 import { Column, Card, Description, Comment } from "types/index";
 
-export const descriptionData: Description[] = [
-  { descriptionText: "Description" },
-];
+export const descriptionData: Description = { descriptionText: "Description" };
 
 export const commentsData: Comment[] = [{ id: "0", commentText: "Comment1" }];
 
