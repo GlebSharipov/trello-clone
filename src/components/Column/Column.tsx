@@ -1,10 +1,10 @@
 import React, { FC, useState } from "react";
 
-import { Card } from "components";
+import { Card, CardPopup } from "components";
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
-import { cardsDefaultData } from "utils/mock";
+import { cardsDefaultData, commentsData, descriptionData } from "utils/mock";
 import { v4 as uuidv4 } from "uuid";
 
 import { CrossIcon } from "../icons/CrossIcon";
@@ -15,10 +15,11 @@ interface ColumnProps {
   id: string;
 }
 
-export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
+export const Column: FC<ColumnProps> = ({ textTitle }) => {
   const [isCardTitleEditable, setIsCardTitleEditable] = useState(false);
   const [cardText, setCardText] = useState("");
   const [cards, setCards] = useState(cardsDefaultData);
+  const [isVisibleCardPopup, setIsVisibleCardPopup] = useState(false);
   const trimmedText = cardText.trim();
 
   const handleChangeText: React.ChangeEventHandler<HTMLTextAreaElement> = (
@@ -35,7 +36,12 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
   };
 
   const handleAddCard = () => {
-    const newCard = { text: trimmedText, id: uuidv4() };
+    const newCard = {
+      text: trimmedText,
+      id: uuidv4(),
+      description: descriptionData,
+      comments: commentsData,
+    };
     if (trimmedText) {
       setCards((prevCards) => [...prevCards, newCard]);
       setCardText("");
@@ -56,12 +62,21 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
     }
   };
 
+  const handleVisiblePopup = () => {
+    setIsVisibleCardPopup(true);
+  };
+
   return (
     <Root>
       <InputTitle textTitle={textTitle} />
       <CardContainer>
         {cards.map((card) => (
-          <Card key={card.id} text={card.text} id={card.id} />
+          <Card
+            onClick={handleVisiblePopup}
+            key={card.id}
+            text={card.text}
+            id={card.id}
+          />
         ))}
       </CardContainer>
 
@@ -90,6 +105,7 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
           </ButtonContainer>
         </Container>
       )}
+      <CardPopup isVisible={isVisibleCardPopup} />
     </Root>
   );
 };

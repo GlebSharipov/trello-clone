@@ -1,21 +1,35 @@
-import { Column, Card } from "types/index";
+import { Column, Card, Description, Comment } from "types/index";
+
+export const descriptionData: Description[] = [
+  { descriptionText: "Description" },
+];
+
+export const commentsData: Comment[] = [{ id: "0", commentText: "Comment1" }];
 
 export const cardsDefaultData: Card[] = [
   {
     id: "0",
     text: "Text1",
+    description: descriptionData,
+    comments: commentsData,
   },
   {
     id: "1",
     text: "Text2",
+    description: descriptionData,
+    comments: commentsData,
   },
   {
     id: "2",
     text: "Text3",
+    description: descriptionData,
+    comments: commentsData,
   },
   {
     id: "3",
     text: "Text4",
+    description: descriptionData,
+    comments: commentsData,
   },
 ];
 

@@ -18,7 +18,7 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
     setName(e.target.value);
 
   return (
-    <Modal>
+    <Root>
       <StyledInput
         required
         value={name}
@@ -31,9 +31,23 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
         text="Send"
         type="submit"
       />
-    </Modal>
+    </Root>
   );
 };
+
+const Root = styled(Modal)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 350px;
+  height: 25vh;
+  overflow: auto;
+  border: 1px solid ${COLORS.black};
+  background-color: ${COLORS.white};
+  border-radius: 10px;
+  padding: 40px;
+`;
 
 const StyledButton = styled(Button)`
   background-color: ${COLORS.gray};

@@ -22,7 +22,7 @@ export const Modal: FC<ModalProps> = ({
 }) => {
   return isVisible ? (
     <Root onClick={onClose}>
-      <StyledModal className={className}>
+      <StyledModal onClick={(e) => e.stopPropagation()} className={className}>
         {isCloseButtonShowed && <StyledCrossIcon />}
         {children}
       </StyledModal>
@@ -31,30 +31,26 @@ export const Modal: FC<ModalProps> = ({
 };
 
 const Root = styled.div`
-  z-index: 1;
+  z-index: 20;
   position: absolute;
-  width: 100vw;
-  height: 100vh;
-  background-color: ${COLORS.orange};
-  opacity: 0.4;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: ${COLORS.transparent_black};
+  align-items: flex-start;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  position: fixed;
 `;
 
 const StyledModal = styled.form`
+  z-index: 35;
   position: relative;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 350px;
-  height: 25vh;
-  overflow: auto;
-  border: 1px solid ${COLORS.black};
-  background-color: ${COLORS.white};
-  border-radius: 10px;
-  padding: 40px;
 `;
 
 const StyledCrossIcon = styled(CrossIcon)`

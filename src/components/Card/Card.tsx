@@ -8,11 +8,12 @@ import { CrossIcon } from "../icons/CrossIcon";
 interface CardProps {
   text: string;
   id: string;
+  onClick: React.MouseEventHandler;
 }
 
-export const Card: FC<CardProps> = ({ text }) => {
+export const Card: FC<CardProps> = ({ text, onClick }) => {
   return (
-    <Root>
+    <Root onClick={onClick}>
       {text}
       <CrossButton>
         <StyledCrossIcon />
