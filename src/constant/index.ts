@@ -1,2 +1,2 @@
 export { COLORS } from "./colors";
-export { ZINDEX } from "./constants";
+export { Z_INDEX } from "./constants";

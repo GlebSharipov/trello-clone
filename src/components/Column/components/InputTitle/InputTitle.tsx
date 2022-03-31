@@ -6,30 +6,41 @@ import styled from "styled-components";
 
 interface InputTitleProps {
   textTitle: string;
+  columnId: string;
+  editColumnName: (columnId: string, columnName: string) => void;
 }
 
-export const InputTitle: FC<InputTitleProps> = ({ textTitle }) => {
+export const InputTitle: FC<InputTitleProps> = ({
+  textTitle,
+  editColumnName,
+  columnId,
+}) => {
   const [isColumnTitleEditable, setIsColumnTitleEditable] = useState(false);
-  const [nameColumn, setNameColumn] = useState(textTitle);
+  const [columnName, setColumnName] = useState(textTitle);
+  const trimmedColumnName = columnName.trim();
 
   const handleChangeColumn: React.ChangeEventHandler<HTMLInputElement> = (e) =>
-    setNameColumn(e.target.value);
+    setColumnName(e.target.value);
 
   const handleShowInputColumn = () => {
     setIsColumnTitleEditable(true);
   };
 
   const handleBlur: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setNameColumn(e.target.value);
-    setIsColumnTitleEditable(false);
-    if (nameColumn.length === 0) {
-      return setNameColumn(textTitle);
+    setColumnName(e.target.value);
+    if (trimmedColumnName) {
+      setColumnName(trimmedColumnName);
+      editColumnName(columnId, columnName);
+      setIsColumnTitleEditable(false);
     }
   };
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === "Enter") {
-      setIsColumnTitleEditable(false);
+      if (trimmedColumnName) {
+        editColumnName(columnId, columnName);
+        setIsColumnTitleEditable(false);
+      }
     }
   };
 
@@ -40,11 +51,11 @@ export const InputTitle: FC<InputTitleProps> = ({ textTitle }) => {
           onKeyDown={keyDownHandler}
           onBlur={handleBlur}
           onChange={handleChangeColumn}
-          value={nameColumn}
+          value={columnName}
           type="text"
         />
       ) : (
-        <Title onClick={handleShowInputColumn}>{nameColumn}</Title>
+        <Title onClick={handleShowInputColumn}>{columnName}</Title>
       )}
     </Root>
   );

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { ZINDEX } from "constant";
+import { Z_INDEX } from "constant";
 import styled from "styled-components";
 
 import { CrossIcon } from "../../icons/CrossIcon";
@@ -25,7 +25,7 @@ export const Modal: FC<ModalProps> = ({
 };
 
 const Root = styled.form`
-  z-index: ${ZINDEX.zindex35};
+  z-index: ${Z_INDEX.index35};
   position: relative;
   left: 50%;
   top: 50%;

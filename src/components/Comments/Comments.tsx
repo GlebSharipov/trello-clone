@@ -3,25 +3,40 @@ import React, { FC, useState } from "react";
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
-import { commentsData } from "utils/mock";
-import { v4 as uuidv4 } from "uuid";
+import { CommentType } from "types";
 
-export const Comments: FC = () => {
-  const [comments, setComments] = useState(commentsData);
+import { CommentItem } from "./components";
+
+interface CommentsProps {
+  authorName: string;
+  commentsData: Record<string, CommentType>;
+  cardId: string;
+  addComment: (cardId: string, commentText: string) => void;
+  deleteComment: (idCommet: string) => void;
+  editComment: (comment: string, commentId: string) => void;
+}
+
+export const Comments: FC<CommentsProps> = ({
+  commentsData,
+  authorName,
+  addComment,
+  deleteComment,
+  editComment,
+  cardId,
+}) => {
   const [isCommentsEditable, setIsCommentsEditable] = useState(false);
   const [commentText, setCommentText] = useState("");
   const trimmedTextComment = commentText.trim();
 
+  const filteredComment = Object.values(commentsData).filter(
+    (comment) => comment.cardId === cardId
+  );
+
   const handleAddComment = () => {
-    const newComment = {
-      commentText: trimmedTextComment,
-      id: uuidv4(),
-    };
-    if (trimmedTextComment) {
-      setComments((prevComment) => [...prevComment, newComment]);
-      setCommentText("");
-      setIsCommentsEditable(false);
-    }
+    addComment(cardId, trimmedTextComment);
+
+    setCommentText("");
+    setIsCommentsEditable(false);
   };
 
   const handleCommentsEditable = () => {
@@ -42,15 +57,6 @@ export const Comments: FC = () => {
     setCommentText(e.target.value);
   };
 
-  const handleBlurComments: React.ChangeEventHandler<
-    HTMLTextAreaElement
-  > = () => {
-    if (trimmedTextComment) {
-      handleAddComment();
-    }
-    setIsCommentsEditable(false);
-  };
-
   return (
     <Root>
       <CommentsTitle>Comments</CommentsTitle>
@@ -61,14 +67,13 @@ export const Comments: FC = () => {
       ) : (
         <AddComment>
           <AddCommentsText
-            value={commentText}
+            value={trimmedTextComment}
             onKeyDown={handleKeyDownHandler}
             autoFocus
-            onBlur={handleBlurComments}
             onChange={handleChangeTextComment}
             placeholder="Write a comment..."
           ></AddCommentsText>
-          <ButtonContainer onClick={(e) => e.stopPropagation()}>
+          <ButtonContainer>
             <StyledButton
               text="Save"
               type="submit"
@@ -78,14 +83,15 @@ export const Comments: FC = () => {
         </AddComment>
       )}
       <CommentsContainer>
-        {comments.map((comment) => (
-          <Comment key={comment.id}>
-            <AuthorName>Gleb</AuthorName>
-            <TextComment
-              onChange={handleChangeTextComment}
-              value={comment.commentText}
-            />
-          </Comment>
+        {filteredComment.map((comment) => (
+          <CommentItem
+            key={comment.id}
+            commentId={comment.id}
+            commentText={comment.commentText}
+            authorName={authorName}
+            deleteComment={deleteComment}
+            editComment={editComment}
+          />
         ))}
       </CommentsContainer>
     </Root>
@@ -130,22 +136,6 @@ const AddComment = styled.div`
   width: 100%;
 `;
 
-const Comment = styled.li`
-  margin-top: 5px;
-`;
-
-const TextComment = styled.textarea`
-  width: 100%;
-  margin-bottom: 5px;
-  font-size: 16px;
-  padding: 10px;
-  border-radius: 4px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  resize: none;
-  background-color: ${COLORS.gray};
-`;
-
 const CommentsContainer = styled.ul`
   max-height: 400px;
   overflow-x: auto;
@@ -156,12 +146,6 @@ const ButtonContainer = styled.div`
   align-items: center;
   width: 150px;
   margin-top: 5px;
-`;
-
-const AuthorName = styled.p`
-  font-size: 20px;
-  margin-right: 20px;
-  color: ${COLORS.black};
 `;
 
 const StyledButton = styled(Button)`

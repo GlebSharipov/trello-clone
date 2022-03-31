@@ -1,26 +1,52 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState } from "react";
 
-import { Card, CardPopup } from "components";
+import { Card } from "components";
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
-import { cardsDefaultData, commentsData, descriptionData } from "utils/mock";
-import { v4 as uuidv4 } from "uuid";
+import { CardType, CommentType } from "types";
 
 import { CrossIcon } from "../icons/CrossIcon";
 import { InputTitle } from "./components";
 
 interface ColumnProps {
   textTitle: string;
+  authorName: string;
   id: string;
+  cards: Record<string, CardType>;
+  comments: Record<string, CommentType>;
+  addCard: (value: string, columnId: string) => void;
+  deleteCard: (cardId: string) => void;
+  addComment: (cardId: string, commentText: string) => void;
+  deleteComment: (idCommet: string) => void;
+  addDescription: (description: string, key: string) => void;
+  editComment: (comment: string, commentId: string) => void;
+  editCardText: (cardId: string, text: string) => void;
+  editColumnName: (columnId: string, columnName: string) => void;
 }
 
-export const Column: FC<ColumnProps> = ({ textTitle }) => {
+export const Column: FC<ColumnProps> = ({
+  textTitle,
+  id,
+  comments,
+  cards,
+  authorName,
+  addCard,
+  deleteCard,
+  addComment,
+  deleteComment,
+  addDescription,
+  editComment,
+  editCardText,
+  editColumnName,
+}) => {
   const [isCardTitleEditable, setIsCardTitleEditable] = useState(false);
   const [cardText, setCardText] = useState("");
-  const [cards, setCards] = useState(cardsDefaultData);
-  const [isVisibleCardPopup, setIsVisibleCardPopup] = useState(false);
   const trimmedText = cardText.trim();
+
+  const filteredListsCards = Object.values(cards).filter(
+    (card) => card.columnId === id
+  );
 
   const handleChangeText: React.ChangeEventHandler<HTMLTextAreaElement> = (
     e
@@ -37,14 +63,8 @@ export const Column: FC<ColumnProps> = ({ textTitle }) => {
   };
 
   const handleAddCard = () => {
-    const newCard = {
-      text: trimmedText,
-      id: uuidv4(),
-      description: descriptionData,
-      comments: commentsData,
-    };
     if (trimmedText) {
-      setCards((prevCards) => [...prevCards, newCard]);
+      addCard(trimmedText, id);
       setCardText("");
       setIsCardTitleEditable(false);
     }
@@ -65,37 +85,30 @@ export const Column: FC<ColumnProps> = ({ textTitle }) => {
     }
   };
 
-  const handleKeyDownEsc = ({ key }: KeyboardEvent) => {
-    switch (key) {
-      case "Escape":
-        setIsVisibleCardPopup(false);
-        break;
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDownEsc);
-    return () => document.removeEventListener("keydown", handleKeyDownEsc);
-  });
-
-  const toggleIsVisiblePopup = () => {
-    if (!isVisibleCardPopup) {
-      setIsVisibleCardPopup(true);
-    } else {
-      setIsVisibleCardPopup(false);
-    }
-  };
-
   return (
     <Root>
-      <InputTitle textTitle={textTitle} />
+      <InputTitle
+        columnId={id}
+        editColumnName={editColumnName}
+        textTitle={textTitle}
+      />
       <CardContainer>
-        {cards.map((card) => (
+        {filteredListsCards.map((card) => (
           <Card
-            onClick={toggleIsVisiblePopup}
+            columnName={textTitle}
+            addComment={addComment}
+            authorName={authorName}
+            comments={comments}
             key={card.id}
             text={card.text}
             id={card.id}
+            columnId={id}
+            description={card.description}
+            deleteCard={deleteCard}
+            deleteComment={deleteComment}
+            addDescription={addDescription}
+            editComment={editComment}
+            editCardText={editCardText}
           />
         ))}
       </CardContainer>
@@ -125,11 +138,6 @@ export const Column: FC<ColumnProps> = ({ textTitle }) => {
           </ButtonContainer>
         </Container>
       )}
-
-      <CardPopup
-        isVisible={isVisibleCardPopup}
-        onClose={toggleIsVisiblePopup}
-      />
     </Root>
   );
 };

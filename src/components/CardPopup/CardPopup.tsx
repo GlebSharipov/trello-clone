@@ -2,26 +2,91 @@ import React, { FC, useState } from "react";
 
 import { Comments } from "components";
 import { Modal, Button } from "components/UI";
-import { COLORS, ZINDEX } from "constant";
+import { COLORS, Z_INDEX } from "constant";
 import styled from "styled-components";
+import { CommentType } from "types";
 
 import { CrossIcon } from "../icons/CrossIcon";
 
 interface CardPopupProps {
-  authorName?: string;
-  columnName?: string;
-  textCard?: string;
-  comments?: string;
-  isVisible: boolean;
-  onClose: React.MouseEventHandler;
+  cardId: string;
+  authorName: string;
+  columnName: string;
+  textCard: string;
+  comments: Record<string, CommentType>;
+  isVisible?: boolean;
+  description: string;
+  onClose?: React.MouseEventHandler;
+  addComment: (cardId: string, commentText: string) => void;
+  deleteComment: (idCommet: string) => void;
+  addDescription: (description: string, key: string) => void;
+  editComment: (comment: string, commentId: string) => void;
+  editCardText: (cardId: string, text: string) => void;
 }
 
-export const CardPopup: FC<CardPopupProps> = ({ onClose, isVisible }) => {
+export const CardPopup: FC<CardPopupProps> = ({
+  onClose,
+  isVisible,
+  authorName,
+  textCard,
+  columnName,
+  comments,
+  cardId,
+  description,
+  addComment,
+  deleteComment,
+  editComment,
+  addDescription,
+  editCardText,
+}) => {
   const [isDescriptionEditable, setIsDescriptionEditable] = useState(false);
-  const [descriptionText, setDescriptionText] = useState("");
+  const [descriptionText, setDescriptionText] = useState(description);
+  const [editTextCard, setEditTextCard] = useState(textCard);
+  const [isCardEditable, setIsCardEditable] = useState(false);
+  const trimmedText = descriptionText.trim();
+  const trimmedCardText = editTextCard.trim();
 
   const handleDescriptionEditable = () => {
     setIsDescriptionEditable(true);
+  };
+
+  const handleCardEditable = () => {
+    setIsCardEditable(true);
+    setEditTextCard(trimmedCardText);
+  };
+
+  const handleEditCard = (cardId: string, cardText: string) => {
+    editCardText(cardId, cardText);
+    setEditTextCard(trimmedCardText);
+  };
+
+  const handleChangeCardText: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    e
+  ) => {
+    setEditTextCard(e.target.value);
+  };
+
+  const handleBlur: React.ChangeEventHandler<HTMLTextAreaElement> = () => {
+    if (trimmedCardText) {
+      handleEditCard(cardId, trimmedCardText);
+    }
+    setIsCardEditable(false);
+  };
+
+  const handeleKeyDownEnter = (
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (event.code === "Enter") {
+      handleEditCard(cardId, editTextCard);
+      setIsCardEditable(false);
+    }
+  };
+
+  const handleAddDiscription = () => {
+    if (trimmedText) {
+      setDescriptionText(trimmedText);
+      addDescription(trimmedText, cardId);
+    }
   };
 
   const handleChangeTextDescription: React.ChangeEventHandler<
@@ -33,6 +98,7 @@ export const CardPopup: FC<CardPopupProps> = ({ onClose, isVisible }) => {
   const handleBlurDescription: React.ChangeEventHandler<
     HTMLTextAreaElement
   > = () => {
+    handleAddDiscription();
     setIsDescriptionEditable(false);
   };
 
@@ -43,10 +109,23 @@ export const CardPopup: FC<CardPopupProps> = ({ onClose, isVisible }) => {
           <StyledModal>
             <PopupHeader>
               <Container>
-                <CardTitle>asdasd</CardTitle>
-                <ColumnName>in list: NAME COLUMN </ColumnName>
+                {isCardEditable ? (
+                  <CardTitleInput
+                    onKeyDown={handeleKeyDownEnter}
+                    onBlur={handleBlur}
+                    value={editTextCard}
+                    autoFocus
+                    onChange={handleChangeCardText}
+                  />
+                ) : (
+                  <CardTitle onClick={handleCardEditable}>
+                    {editTextCard}
+                  </CardTitle>
+                )}
+
+                <ColumnName>in list: {columnName} </ColumnName>
               </Container>
-              <AuthorName>Gleb</AuthorName>
+              <AuthorName>{authorName}</AuthorName>
               <ButtonCross onClick={onClose}>
                 <StyledCrossIcon />
               </ButtonCross>
@@ -55,7 +134,9 @@ export const CardPopup: FC<CardPopupProps> = ({ onClose, isVisible }) => {
               <DescriptionTitle>Description</DescriptionTitle>
               {!isDescriptionEditable ? (
                 <DescriptionFakeText onClick={handleDescriptionEditable}>
-                  Add a more detailed description...
+                  {descriptionText
+                    ? descriptionText
+                    : "Add a more detailed description..."}
                 </DescriptionFakeText>
               ) : (
                 <ContainerDescription>
@@ -70,7 +151,7 @@ export const CardPopup: FC<CardPopupProps> = ({ onClose, isVisible }) => {
                     <StyledButton
                       text="Save"
                       type="submit"
-                      onClick={() => {}}
+                      onClick={handleAddDiscription}
                     />
                     <ButtonCross onClick={() => {}}>
                       <StyledCrossIcon />
@@ -79,7 +160,14 @@ export const CardPopup: FC<CardPopupProps> = ({ onClose, isVisible }) => {
                 </ContainerDescription>
               )}
             </Description>
-            <Comments />
+            <Comments
+              cardId={cardId}
+              addComment={addComment}
+              deleteComment={deleteComment}
+              editComment={editComment}
+              authorName={authorName}
+              commentsData={comments}
+            />
           </StyledModal>
         </Root>
       )}
@@ -88,7 +176,7 @@ export const CardPopup: FC<CardPopupProps> = ({ onClose, isVisible }) => {
 };
 
 const Root = styled.div`
-  z-index: ${ZINDEX.zIndex10};
+  z-index: ${Z_INDEX.index10};
   position: absolute;
   overflow: hidden;
   width: 100%;
@@ -125,7 +213,6 @@ const PopupHeader = styled.div`
   width: 100%;
   margin-bottom: 50px;
   display: flex;
-  align-items: center;
 `;
 
 const AuthorName = styled.p`
@@ -135,8 +222,28 @@ const AuthorName = styled.p`
 `;
 
 const CardTitle = styled.h2`
-  font-size: 25px;
+  word-break: break-all;
+  cursor: pointer;
+  padding: 5px;
+  width: 95%;
+  font-size: 18px;
+  border-radius: 4px;
+  background-color: ${COLORS.gray};
   color: ${COLORS.black};
+  &:hover {
+    background-color: ${COLORS.lighte_gray};
+  }
+`;
+
+const CardTitleInput = styled.textarea`
+  width: 95%;
+  font-size: 18px;
+  padding: 5px;
+  border-radius: 4px;
+  overflow-wrap: break-word;
+  resize: none;
+  border: 2px solid ${COLORS.blue};
+  background-color: ${COLORS.white};
 `;
 
 const StyledCrossIcon = styled(CrossIcon)`
