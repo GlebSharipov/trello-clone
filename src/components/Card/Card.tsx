@@ -1,11 +1,12 @@
 import React, { FC, useState, useEffect, useMemo } from "react";
 
 import { CardPopup } from "components";
+import { ButtonCross } from "components/UI";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
 import { CommentType } from "types";
 
-import { CrossIcon, CommentIcon } from "../icons";
+import { CommentIcon } from "../icons";
 
 interface CardProps {
   columnName: string;
@@ -79,10 +80,7 @@ export const Card: FC<CardProps> = ({
             <CommentIcon />
           </CountContainer>
         )}
-
-        <CrossButton onClick={handleDeleteCard}>
-          <StyledCrossIcon />
-        </CrossButton>
+        <ButtonCross onClick={handleDeleteCard} />
       </Root>
 
       <CardPopup
@@ -122,22 +120,8 @@ const Root = styled.li`
   }
 `;
 
-const CrossButton = styled.button`
-  margin-left: 5px;
-  &:focus {
-    transform: translateY(-1px);
-  }
-`;
-
 const CardTextContainer = styled.div`
   flex: 1;
-`;
-
-const StyledCrossIcon = styled(CrossIcon)`
-  fill: ${COLORS.dark_gray};
-  &:hover {
-    fill: ${COLORS.black};
-  }
 `;
 
 const CountContainer = styled.div`

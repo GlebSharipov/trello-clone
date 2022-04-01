@@ -1,13 +1,12 @@
 import React, { FC, useState, useMemo } from "react";
 
 import { Card } from "components";
-import { Button } from "components/UI";
+import { Button, ButtonCross } from "components/UI";
 import { COLORS } from "constant/colors";
 import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 import { CardType, CommentType } from "types";
 
-import { CrossIcon } from "../icons/CrossIcon";
 import { InputTitle } from "./components";
 
 interface ColumnProps {
@@ -134,9 +133,7 @@ export const Column: FC<ColumnProps> = ({
               text="Add card"
               onClick={handleAddCard}
             />
-            <ButtonCross onClick={toggleIsInputVisible}>
-              <StyledCrossIcon />
-            </ButtonCross>
+            <ButtonCross onClick={toggleIsInputVisible} />
           </ButtonContainer>
         </Container>
       )}
@@ -199,24 +196,8 @@ const StyledButton = styled(Button)`
   color: ${COLORS.white};
   background-color: ${COLORS.blue};
   margin: 0;
+  margin-right: 10px;
   &:hover {
     background-color: ${COLORS.dark_blue};
-  }
-`;
-
-const ButtonCross = styled.button`
-  width: 30px;
-  margin-left: 10px;
-  &:focus {
-    transform: translateY(-1px);
-  }
-`;
-
-const StyledCrossIcon = styled(CrossIcon)`
-  cursor: pointer;
-  width: 30px;
-  fill: ${COLORS.dark_gray};
-  &:hover {
-    fill: ${COLORS.black};
   }
 `;

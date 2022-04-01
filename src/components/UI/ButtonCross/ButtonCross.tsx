@@ -13,11 +13,11 @@ interface ButtonCrossProps {
 export const ButtonCross: FC<ButtonCrossProps> = ({
   className,
   onClick,
-  icon: Icon,
+  icon,
 }) => {
   return (
     <Root className={className} onClick={onClick}>
-      {Icon ? Icon : <StyledCrossIcon />}
+      {icon ? icon : <StyledCrossIcon />}
     </Root>
   );
 };
