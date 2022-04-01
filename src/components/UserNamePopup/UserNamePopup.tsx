@@ -42,6 +42,7 @@ const Root = styled(Modal)`
   align-items: center;
   justify-content: center;
   max-width: 350px;
+  min-height: 25vh;
   overflow: auto;
   border: 1px solid ${COLORS.black};
   background-color: ${COLORS.white};

@@ -2,12 +2,11 @@ import React, { FC, useState } from "react";
 
 import { Comments } from "components";
 import { Modal, Button } from "components/UI";
-import { COLORS, Z_INDEX } from "constant";
+import { ButtonCross } from "components/UI";
+import { COLORS } from "constant";
 import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 import { CommentType } from "types";
-
-import { CrossIcon } from "../icons/CrossIcon";
 
 interface CardPopupProps {
   cardId: string;
@@ -17,7 +16,7 @@ interface CardPopupProps {
   comments: Record<string, CommentType>;
   isVisible?: boolean;
   description: string;
-  onClose?: React.MouseEventHandler;
+  onClose?: () => void;
   addComment: (cardId: string, commentText: string) => void;
   deleteComment: (idCommet: string) => void;
   addDescription: (description: string, key: string) => void;
@@ -47,8 +46,12 @@ export const CardPopup: FC<CardPopupProps> = ({
   const trimmedText = descriptionText.trim();
   const trimmedCardText = editTextCard.trim();
 
-  const handleDescriptionEditable = () => {
-    setIsDescriptionEditable(true);
+  const toggleDescriptionEditable = () => {
+    if (!isDescriptionEditable) {
+      setIsDescriptionEditable(true);
+    } else {
+      setIsDescriptionEditable(false);
+    }
   };
 
   const handleCardEditable = () => {
@@ -106,97 +109,75 @@ export const CardPopup: FC<CardPopupProps> = ({
   return (
     <>
       {isVisible && (
-        <Root>
-          <StyledModal>
-            <PopupHeader>
-              <Container>
-                {isCardEditable ? (
-                  <CardTitleInput
-                    onKeyDown={handeleKeyDownEnter}
-                    onBlur={handleBlur}
-                    value={editTextCard}
-                    autoFocus
-                    onChange={handleChangeCardText}
-                  />
-                ) : (
-                  <CardTitle onClick={handleCardEditable}>
-                    {editTextCard}
-                  </CardTitle>
-                )}
-
-                <ColumnName>in list: {columnName} </ColumnName>
-              </Container>
-              <AuthorName>{authorName}</AuthorName>
-              <ButtonCross onClick={onClose}>
-                <StyledCrossIcon />
-              </ButtonCross>
-            </PopupHeader>
-            <Description>
-              <DescriptionTitle>Description</DescriptionTitle>
-              {!isDescriptionEditable ? (
-                <DescriptionFakeText onClick={handleDescriptionEditable}>
-                  {descriptionText
-                    ? descriptionText
-                    : "Add a more detailed description..."}
-                </DescriptionFakeText>
+        <StyledModal isCloseButtonShowed={true} onClose={onClose}>
+          <PopupHeader>
+            <Container>
+              {isCardEditable ? (
+                <CardTitleInput
+                  onKeyDown={handeleKeyDownEnter}
+                  onBlur={handleBlur}
+                  value={editTextCard}
+                  autoFocus
+                  onChange={handleChangeCardText}
+                />
               ) : (
-                <ContainerDescription>
-                  <DescriptionText
-                    value={descriptionText}
-                    onBlur={handleBlurDescription}
-                    onChange={handleChangeTextDescription}
-                    autoFocus
-                    placeholder="Add a more detailed description..."
-                  ></DescriptionText>
-                  <ButtonContainer>
-                    <StyledButton
-                      text="Save"
-                      type="submit"
-                      onClick={handleAddDiscription}
-                    />
-                    <ButtonCross onClick={() => {}}>
-                      <StyledCrossIcon />
-                    </ButtonCross>
-                  </ButtonContainer>
-                </ContainerDescription>
+                <CardTitle onClick={handleCardEditable}>
+                  {editTextCard}
+                </CardTitle>
               )}
-            </Description>
-            <Comments
-              cardId={cardId}
-              addComment={addComment}
-              deleteComment={deleteComment}
-              editComment={editComment}
-              authorName={authorName}
-              commentsData={comments}
-            />
-          </StyledModal>
-        </Root>
+
+              <ColumnName>in list: {columnName} </ColumnName>
+            </Container>
+            <AuthorName>{authorName}</AuthorName>
+          </PopupHeader>
+          <Description>
+            <DescriptionTitle>Description</DescriptionTitle>
+            {!isDescriptionEditable ? (
+              <DescriptionFakeText onClick={toggleDescriptionEditable}>
+                {descriptionText
+                  ? descriptionText
+                  : "Add a more detailed description..."}
+              </DescriptionFakeText>
+            ) : (
+              <ContainerDescription>
+                <DescriptionText
+                  value={descriptionText}
+                  onBlur={handleBlurDescription}
+                  onChange={handleChangeTextDescription}
+                  autoFocus
+                  placeholder="Add a more detailed description..."
+                ></DescriptionText>
+                <ButtonContainer>
+                  <StyledButton
+                    text="Save"
+                    type="submit"
+                    onClick={handleAddDiscription}
+                  />
+                  <ButtonCross onClick={toggleDescriptionEditable} />
+                </ButtonContainer>
+              </ContainerDescription>
+            )}
+          </Description>
+          <Comments
+            cardId={cardId}
+            addComment={addComment}
+            deleteComment={deleteComment}
+            editComment={editComment}
+            authorName={authorName}
+            commentsData={comments}
+          />
+        </StyledModal>
       )}
     </>
   );
 };
-
-const Root = styled.div`
-  z-index: ${Z_INDEX.index10};
-  position: absolute;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  background-color: ${COLORS.transparent_black};
-  align-items: flex-start;
-  justify-content: center;
-  left: 0;
-  top: 0;
-  overflow-y: auto;
-  position: fixed;
-`;
 
 const StyledModal = styled(Modal)`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  max-width: 750px;
+  width: 750px;
   height: 80%;
   background-color: ${COLORS.white};
   padding: 10px 20px;
@@ -250,24 +231,11 @@ const CardTitleInput = styled(TextareaAutosize)`
   background-color: ${COLORS.white};
 `;
 
-const StyledCrossIcon = styled(CrossIcon)`
-  width: 30px;
-`;
-
 const ColumnName = styled.div`
   max-width: 560px;
   word-break: break-all;
   color: ${COLORS.black};
   font-size: 16px;
-`;
-
-const ButtonCross = styled.button`
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  &:hover {
-    background-color: ${COLORS.lighte_gray};
-  }
 `;
 
 const Description = styled.div`

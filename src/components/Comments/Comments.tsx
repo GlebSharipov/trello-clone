@@ -142,7 +142,7 @@ const AddComment = styled.div`
 `;
 
 const CommentsContainer = styled.ul`
-  max-height: 350px;
+  max-height: 300px;
   overflow-x: auto;
 `;
 
