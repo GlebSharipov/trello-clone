@@ -18,11 +18,12 @@ export const Input: FC<InputProps> = ({
   type,
   placeholder,
   value,
+  required,
+  className,
   onChange,
   onBlur,
   onKeyDown,
-  required,
-  className,
+  ...props
 }) => {
   return (
     <StyledInput
@@ -30,11 +31,11 @@ export const Input: FC<InputProps> = ({
       value={value}
       autoFocus
       className={className}
-      required={required}
       onChange={onChange}
       onBlur={onBlur}
       onKeyDown={onKeyDown}
       placeholder={placeholder}
+      {...props}
     />
   );
 };

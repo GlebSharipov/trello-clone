@@ -12,8 +12,8 @@ interface InputTitleProps {
 
 export const InputTitle: FC<InputTitleProps> = ({
   textTitle,
-  editColumnName,
   columnId,
+  editColumnName,
 }) => {
   const [isColumnTitleEditable, setIsColumnTitleEditable] = useState(false);
   const [columnName, setColumnName] = useState(textTitle);

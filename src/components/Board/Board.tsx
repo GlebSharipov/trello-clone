@@ -16,12 +16,12 @@ interface BoardProps {
 
 export const Board: FC<BoardProps> = ({ authorName }) => {
   const [columnsData, setColumnsData] = useLocalStorage(
-    "Columns",
+    "columns",
     columnsDefaultData
   );
-  const [cardsData, setCardsData] = useLocalStorage("Cards", cardsDefaultData);
+  const [cardsData, setCardsData] = useLocalStorage("cards", cardsDefaultData);
   const [commentsData, setCommentsData] = useLocalStorage(
-    "Comments",
+    "comments",
     commentsDefaultData
   );
 

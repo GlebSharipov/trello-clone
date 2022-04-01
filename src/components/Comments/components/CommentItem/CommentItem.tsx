@@ -61,6 +61,7 @@ export const CommentItem: FC<CommentItemProps> = ({
       ) : (
         <>
           <EditCommentsText
+            autoFocus
             value={editCommentText}
             onChange={handleChangeComment}
           ></EditCommentsText>

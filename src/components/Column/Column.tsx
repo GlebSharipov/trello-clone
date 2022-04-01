@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useMemo } from "react";
 
 import { Card } from "components";
 import { Button } from "components/UI";
@@ -44,8 +44,9 @@ export const Column: FC<ColumnProps> = ({
   const [cardText, setCardText] = useState("");
   const trimmedText = cardText.trim();
 
-  const filteredListsCards = Object.values(cards).filter(
-    (card) => card.columnId === id
+  const filteredCards = useMemo(
+    () => Object.values(cards).filter((card) => card.columnId === id),
+    [cards, id]
   );
 
   const handleChangeText: React.ChangeEventHandler<HTMLTextAreaElement> = (
@@ -93,7 +94,7 @@ export const Column: FC<ColumnProps> = ({
         textTitle={textTitle}
       />
       <CardContainer>
-        {filteredListsCards.map((card) => (
+        {filteredCards.map((card) => (
           <Card
             columnName={textTitle}
             addComment={addComment}
@@ -185,11 +186,10 @@ const ButtonContainer = styled.div`
 const InputAddCard = styled.textarea`
   font-size: 16px;
   width: 100%;
+  min-height: 50px;
   background-color: ${COLORS.white};
-  padding-bottom: 50px;
   overflow: hidden;
   overflow-wrap: break-word;
-  resize: none;
   box-shadow: 0 1px 0 ${COLORS.dark_gray};
 `;
 

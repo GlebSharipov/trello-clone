@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useMemo } from "react";
 
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
@@ -17,19 +17,23 @@ interface CommentsProps {
 }
 
 export const Comments: FC<CommentsProps> = ({
+  cardId,
   commentsData,
   authorName,
   addComment,
   deleteComment,
   editComment,
-  cardId,
 }) => {
   const [isCommentsEditable, setIsCommentsEditable] = useState(false);
   const [commentText, setCommentText] = useState("");
   const trimmedTextComment = commentText.trim();
 
-  const filteredComment = Object.values(commentsData).filter(
-    (comment) => comment.cardId === cardId
+  const filteredComment = useMemo(
+    () =>
+      Object.values(commentsData).filter(
+        (comment) => comment.cardId === cardId
+      ),
+    [commentsData, cardId]
   );
 
   const handleAddComment = () => {

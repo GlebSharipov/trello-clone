@@ -25,7 +25,6 @@ interface CardPopupProps {
 }
 
 export const CardPopup: FC<CardPopupProps> = ({
-  onClose,
   isVisible,
   authorName,
   textCard,
@@ -33,6 +32,7 @@ export const CardPopup: FC<CardPopupProps> = ({
   comments,
   cardId,
   description,
+  onClose,
   addComment,
   deleteComment,
   editComment,

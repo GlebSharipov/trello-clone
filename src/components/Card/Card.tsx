@@ -1,22 +1,21 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useMemo } from "react";
 
 import { CardPopup } from "components";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
 import { CommentType } from "types";
 
-import commentsImage from "../../assets/image/comments.png";
-import { CrossIcon } from "../icons/CrossIcon";
+import { CrossIcon, CommentIcon } from "../icons";
 
 interface CardProps {
   columnName: string;
   text: string;
   id: string;
   columnId: string;
-  deleteCard: (cardId: string) => void;
   description: string;
   authorName: string;
   comments: Record<string, CommentType>;
+  deleteCard: (cardId: string) => void;
   addComment: (cardId: string, commentText: string) => void;
   deleteComment: (idCommet: string) => void;
   addDescription: (description: string, key: string) => void;
@@ -26,17 +25,17 @@ interface CardProps {
 
 export const Card: FC<CardProps> = ({
   text,
-  deleteCard,
   id,
   authorName,
+  columnName,
+  comments,
+  description,
   addComment,
+  deleteCard,
   deleteComment,
   editComment,
   addDescription,
   editCardText,
-  columnName,
-  comments,
-  description,
 }) => {
   const [isVisibleCardPopup, setIsVisibleCardPopup] = useState(false);
 
@@ -65,20 +64,24 @@ export const Card: FC<CardProps> = ({
     deleteCard(id);
   };
 
-  const countComment = Object.values(comments).filter(
-    (comment) => comment.cardId === id
+  const countComment = useMemo(
+    () => Object.values(comments).filter((comment) => comment.cardId === id),
+    [comments, id]
   );
 
   return (
     <>
       <Root onClick={toggleIsVisiblePopup}>
-        {text}
-        <CrossButton onClick={handleDeleteCard}>
+        <CardTextContainer> {text}</CardTextContainer>
+        {countComment.length !== 0 && (
           <CountContainer>
             {countComment.length}
-            <CommentsImg src={commentsImage} />
-            <StyledCrossIcon />
+            <CommentIcon />
           </CountContainer>
+        )}
+
+        <CrossButton onClick={handleDeleteCard}>
+          <StyledCrossIcon />
         </CrossButton>
       </Root>
 
@@ -119,15 +122,15 @@ const Root = styled.li`
   }
 `;
 
-const CommentsImg = styled.img`
-  width: 20px;
-`;
-
 const CrossButton = styled.button`
   margin-left: 5px;
   &:focus {
     transform: translateY(-1px);
   }
+`;
+
+const CardTextContainer = styled.div`
+  flex: 1;
 `;
 
 const StyledCrossIcon = styled(CrossIcon)`
@@ -140,4 +143,5 @@ const StyledCrossIcon = styled(CrossIcon)`
 const CountContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 `;
