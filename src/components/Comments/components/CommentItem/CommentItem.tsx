@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
+import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 
 interface CommentItemProps {
@@ -91,7 +92,7 @@ const TextComment = styled.div`
   border: 1px solid ${COLORS.green};
 `;
 
-const EditCommentsText = styled.textarea`
+const EditCommentsText = styled(TextareaAutosize)`
   width: 100%;
   padding-bottom: 100px;
   font-size: 16px;

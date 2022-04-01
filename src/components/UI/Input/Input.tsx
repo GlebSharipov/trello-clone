@@ -7,6 +7,7 @@ interface InputProps {
   type?: string;
   placeholder?: string;
   value: string;
+  maxLength?: number;
   className?: string;
   required?: boolean;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
@@ -27,6 +28,7 @@ export const Input: FC<InputProps> = ({
 }) => {
   return (
     <StyledInput
+      maxLength={props.maxLength}
       type={type}
       value={value}
       autoFocus

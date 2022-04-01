@@ -20,6 +20,7 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
   return (
     <Root>
       <StyledInput
+        maxLength={20}
         required
         value={name}
         onChange={handleChange}
@@ -41,7 +42,6 @@ const Root = styled(Modal)`
   align-items: center;
   justify-content: center;
   max-width: 350px;
-  height: 25vh;
   overflow: auto;
   border: 1px solid ${COLORS.black};
   background-color: ${COLORS.white};
@@ -62,5 +62,6 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledInput = styled(Input)`
+  max-lines: 20;
   font-size: 25px;
 `;

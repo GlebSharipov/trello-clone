@@ -2,6 +2,7 @@ import React, { FC, useState, useMemo } from "react";
 
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
+import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 import { CommentType } from "types";
 
@@ -123,7 +124,7 @@ const CommentsFakeText = styled.div`
   }
 `;
 
-const AddCommentsText = styled.textarea`
+const AddCommentsText = styled(TextareaAutosize)`
   width: 100%;
   padding-bottom: 100px;
   font-size: 16px;
@@ -141,7 +142,7 @@ const AddComment = styled.div`
 `;
 
 const CommentsContainer = styled.ul`
-  max-height: 400px;
+  max-height: 350px;
   overflow-x: auto;
 `;
 

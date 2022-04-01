@@ -69,6 +69,8 @@ const Root = styled.div`
 
 const Title = styled.h2`
   cursor: pointer;
+  max-width: 280px;
+  word-break: break-all;
   font-size: 18px;
   margin-bottom: 12px;
 `;

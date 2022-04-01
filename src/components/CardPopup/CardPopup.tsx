@@ -217,6 +217,8 @@ const PopupHeader = styled.div`
 `;
 
 const AuthorName = styled.p`
+  max-width: 80px;
+  word-break: break-all;
   font-size: 20px;
   margin-right: 20px;
   color: ${COLORS.black};
@@ -253,6 +255,8 @@ const StyledCrossIcon = styled(CrossIcon)`
 `;
 
 const ColumnName = styled.div`
+  max-width: 560px;
+  word-break: break-all;
   color: ${COLORS.black};
   font-size: 16px;
 `;
@@ -278,7 +282,9 @@ const DescriptionTitle = styled.h2`
 
 const DescriptionFakeText = styled.div`
   cursor: pointer;
-  height: 50px;
+  word-break: break-all;
+  width: 100%;
+
   font-size: 16px;
   padding: 10px;
   border-radius: 4px;
@@ -288,7 +294,7 @@ const DescriptionFakeText = styled.div`
   }
 `;
 
-const DescriptionText = styled.textarea`
+const DescriptionText = styled(TextareaAutosize)`
   height: 100px;
   font-size: 16px;
   padding: 10px;
@@ -301,6 +307,7 @@ const DescriptionText = styled.textarea`
 `;
 
 const ContainerDescription = styled.div`
+  max-height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
