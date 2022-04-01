@@ -3,6 +3,7 @@ import React, { FC, useState, useMemo } from "react";
 import { Card } from "components";
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
+import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 import { CardType, CommentType } from "types";
 
@@ -183,10 +184,10 @@ const ButtonContainer = styled.div`
   margin: 10px 0;
 `;
 
-const InputAddCard = styled.textarea`
+const InputAddCard = styled(TextareaAutosize)`
   font-size: 16px;
   width: 100%;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
   background-color: ${COLORS.white};
   overflow: hidden;
   overflow-wrap: break-word;
