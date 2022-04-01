@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, SVGProps } from "react";
 
 import { COLORS } from "constant";
 import styled from "styled-components";
@@ -8,16 +8,22 @@ import { CrossIcon } from "../../icons/CrossIcon";
 interface ButtonCrossProps {
   className?: string;
   onClick?: () => void;
+  icon?: SVGProps<SVGSVGElement>;
 }
-export const ButtonCross: FC<ButtonCrossProps> = ({ className, onClick }) => {
+export const ButtonCross: FC<ButtonCrossProps> = ({
+  className,
+  onClick,
+  icon: Icon,
+}) => {
   return (
     <Root className={className} onClick={onClick}>
-      <StyledCrossIcon />
+      {Icon ? Icon : <StyledCrossIcon />}
     </Root>
   );
 };
 
 const Root = styled.button`
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,5 +38,4 @@ const Root = styled.button`
 const StyledCrossIcon = styled(CrossIcon)`
   display: flex;
   justify-content: center;
-  cursor: pointer;
 `;

@@ -109,7 +109,7 @@ export const CardPopup: FC<CardPopupProps> = ({
   return (
     <>
       {isVisible && (
-        <StyledModal isCloseButtonShowed={true} onClose={onClose}>
+        <StyledModal isCloseButtonShowed onClose={onClose}>
           <PopupHeader>
             <Container>
               {isCardEditable ? (
@@ -177,7 +177,7 @@ const StyledModal = styled(Modal)`
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  width: 750px;
+  width: 100%;
   height: 80%;
   background-color: ${COLORS.white};
   padding: 10px 20px;
@@ -240,7 +240,7 @@ const ColumnName = styled.div`
 
 const Description = styled.div`
   width: 100%;
-  height: 20vh;
+  min-height: 20vh;
 `;
 
 const DescriptionTitle = styled.h2`
@@ -284,7 +284,7 @@ const ContainerDescription = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 150px;
+  max-width: 150px;
   margin-top: 5px;
 `;
 

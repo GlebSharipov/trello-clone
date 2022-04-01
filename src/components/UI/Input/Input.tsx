@@ -28,7 +28,6 @@ export const Input: FC<InputProps> = ({
 }) => {
   return (
     <StyledInput
-      maxLength={props.maxLength}
       type={type}
       value={value}
       autoFocus

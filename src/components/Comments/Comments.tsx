@@ -39,7 +39,6 @@ export const Comments: FC<CommentsProps> = ({
 
   const handleAddComment = () => {
     addComment(cardId, trimmedTextComment);
-
     setCommentText("");
     setIsCommentsEditable(false);
   };
