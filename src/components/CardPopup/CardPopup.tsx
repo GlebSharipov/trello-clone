@@ -3,6 +3,7 @@ import React, { FC, useState } from "react";
 import { Comments } from "components";
 import { Modal, Button } from "components/UI";
 import { COLORS, Z_INDEX } from "constant";
+import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 import { CommentType } from "types";
 
@@ -235,13 +236,14 @@ const CardTitle = styled.h2`
   }
 `;
 
-const CardTitleInput = styled.textarea`
+const CardTitleInput = styled(TextareaAutosize)`
   width: 95%;
   font-size: 18px;
   padding: 5px;
   border-radius: 4px;
   overflow-wrap: break-word;
   resize: none;
+  overflow: hidden;
   border: 2px solid ${COLORS.blue};
   background-color: ${COLORS.white};
 `;
