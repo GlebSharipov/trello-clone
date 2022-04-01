@@ -186,10 +186,11 @@ const ButtonContainer = styled.div`
 const InputAddCard = styled.textarea`
   font-size: 16px;
   width: 100%;
-  min-height: 50px;
+  padding-bottom: 50px;
   background-color: ${COLORS.white};
   overflow: hidden;
   overflow-wrap: break-word;
+  resize: none;
   box-shadow: 0 1px 0 ${COLORS.dark_gray};
 `;
 
