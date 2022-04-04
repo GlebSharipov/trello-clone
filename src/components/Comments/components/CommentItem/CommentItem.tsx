@@ -9,16 +9,16 @@ interface CommentItemProps {
   authorName: string;
   commentId: string;
   commentText: string;
-  deleteComment: (idCommet: string) => void;
-  editComment: (comment: string, commentId: string) => void;
+  onDeleteComment: (idCommet: string) => void;
+  onEditComment: (comment: string, commentId: string) => void;
 }
 
 export const CommentItem: FC<CommentItemProps> = ({
   authorName,
   commentId,
   commentText,
-  deleteComment,
-  editComment,
+  onDeleteComment,
+  onEditComment,
 }) => {
   const [isCommentEdit, setIsCommentEdit] = useState(false);
   const [editCommentText, setEditCommentText] = useState(commentText);
@@ -26,7 +26,7 @@ export const CommentItem: FC<CommentItemProps> = ({
 
   const handleEditComment = (comment: string, commentId: string) => {
     if (trimmedComment) {
-      editComment(comment, commentId);
+      onEditComment(comment, commentId);
       setIsCommentEdit(false);
       setEditCommentText(comment);
     }
@@ -39,7 +39,7 @@ export const CommentItem: FC<CommentItemProps> = ({
   };
 
   const handleDeleteComment = (idComment: string) => {
-    deleteComment(idComment);
+    onDeleteComment(idComment);
   };
 
   const handleVisibleCommentEdit = () => {

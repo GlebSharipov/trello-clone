@@ -11,18 +11,13 @@ import { InputTitle } from "./components";
 
 interface ColumnProps {
   textTitle: string;
-  authorName: string;
   id: string;
   cards: Record<string, CardType>;
   comments: Record<string, CommentType>;
-  addCard: (value: string, columnId: string) => void;
-  deleteCard: (cardId: string) => void;
-  addComment: (cardId: string, commentText: string) => void;
-  deleteComment: (idCommet: string) => void;
-  addDescription: (description: string, key: string) => void;
-  editComment: (comment: string, commentId: string) => void;
-  editCardText: (cardId: string, text: string) => void;
-  editColumnName: (columnId: string, columnName: string) => void;
+  onAddCard: (value: string, columnId: string) => void;
+  onDeleteCard: (cardId: string) => void;
+  onEditColumnName: (columnId: string, columnName: string) => void;
+  onCardClick: (id: string) => void;
 }
 
 export const Column: FC<ColumnProps> = ({
@@ -30,15 +25,10 @@ export const Column: FC<ColumnProps> = ({
   id,
   comments,
   cards,
-  authorName,
-  addCard,
-  deleteCard,
-  addComment,
-  deleteComment,
-  addDescription,
-  editComment,
-  editCardText,
-  editColumnName,
+  onAddCard,
+  onDeleteCard,
+  onEditColumnName,
+  onCardClick,
 }) => {
   const [isCardTitleEditable, setIsCardTitleEditable] = useState(false);
   const [cardText, setCardText] = useState("");
@@ -65,7 +55,7 @@ export const Column: FC<ColumnProps> = ({
 
   const handleAddCard = () => {
     if (trimmedText) {
-      addCard(trimmedText, id);
+      onAddCard(trimmedText, id);
       setCardText("");
       setIsCardTitleEditable(false);
     }
@@ -90,26 +80,18 @@ export const Column: FC<ColumnProps> = ({
     <Root>
       <InputTitle
         columnId={id}
-        editColumnName={editColumnName}
+        editColumnName={onEditColumnName}
         textTitle={textTitle}
       />
       <CardContainer>
         {filteredCards.map((card) => (
           <Card
-            columnName={textTitle}
-            addComment={addComment}
-            authorName={authorName}
             comments={comments}
             key={card.id}
             text={card.text}
             id={card.id}
-            columnId={id}
-            description={card.description}
-            deleteCard={deleteCard}
-            deleteComment={deleteComment}
-            addDescription={addDescription}
-            editComment={editComment}
-            editCardText={editCardText}
+            onDeleteCard={onDeleteCard}
+            onCardClick={() => onCardClick(card.id)}
           />
         ))}
       </CardContainer>

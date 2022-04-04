@@ -12,18 +12,18 @@ interface CommentsProps {
   authorName: string;
   commentsData: Record<string, CommentType>;
   cardId: string;
-  addComment: (cardId: string, commentText: string) => void;
-  deleteComment: (idCommet: string) => void;
-  editComment: (comment: string, commentId: string) => void;
+  onAddComment: (cardId: string, commentText: string) => void;
+  onDeleteComment: (idCommet: string) => void;
+  onEditComment: (comment: string, commentId: string) => void;
 }
 
 export const Comments: FC<CommentsProps> = ({
   cardId,
   commentsData,
   authorName,
-  addComment,
-  deleteComment,
-  editComment,
+  onAddComment,
+  onDeleteComment,
+  onEditComment,
 }) => {
   const [isCommentsEditable, setIsCommentsEditable] = useState(false);
   const [commentText, setCommentText] = useState("");
@@ -38,7 +38,7 @@ export const Comments: FC<CommentsProps> = ({
   );
 
   const handleAddComment = () => {
-    addComment(cardId, trimmedTextComment);
+    onAddComment(cardId, trimmedTextComment);
     setCommentText("");
     setIsCommentsEditable(false);
   };
@@ -93,8 +93,8 @@ export const Comments: FC<CommentsProps> = ({
             commentId={comment.id}
             commentText={comment.commentText}
             authorName={authorName}
-            deleteComment={deleteComment}
-            editComment={editComment}
+            onDeleteComment={onDeleteComment}
+            onEditComment={onEditComment}
           />
         ))}
       </CommentsContainer>

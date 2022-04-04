@@ -6,45 +6,42 @@ import { ButtonCross } from "components/UI";
 import { COLORS } from "constant";
 import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
-import { CommentType } from "types";
+import { CommentType, CardType, ColumnType } from "types";
 
 interface CardPopupProps {
-  cardId: string;
   authorName: string;
-  columnName: string;
-  textCard: string;
+  column: Record<string, ColumnType>;
   comments: Record<string, CommentType>;
-  isVisible?: boolean;
-  description: string;
-  onClose?: () => void;
-  addComment: (cardId: string, commentText: string) => void;
-  deleteComment: (idCommet: string) => void;
-  addDescription: (description: string, key: string) => void;
-  editComment: (comment: string, commentId: string) => void;
-  editCardText: (cardId: string, text: string) => void;
+  isVisible: boolean;
+  card: CardType;
+  onClose: () => void;
+  onAddComment: (cardId: string, commentText: string) => void;
+  onDeleteComment: (idCommet: string) => void;
+  onAddDescription: (description: string, key: string) => void;
+  onEditComment: (comment: string, commentId: string) => void;
+  onEditCardText: (cardId: string, text: string) => void;
 }
 
 export const CardPopup: FC<CardPopupProps> = ({
   isVisible,
   authorName,
-  textCard,
-  columnName,
+  column,
   comments,
-  cardId,
-  description,
+  card,
   onClose,
-  addComment,
-  deleteComment,
-  editComment,
-  addDescription,
-  editCardText,
+  onAddComment,
+  onDeleteComment,
+  onEditComment,
+  onAddDescription,
+  onEditCardText,
 }) => {
   const [isDescriptionEditable, setIsDescriptionEditable] = useState(false);
-  const [descriptionText, setDescriptionText] = useState(description);
-  const [editTextCard, setEditTextCard] = useState(textCard);
+  const [descriptionText, setDescriptionText] = useState(card.description);
+  const [editTextCard, setEditTextCard] = useState(card.text);
   const [isCardEditable, setIsCardEditable] = useState(false);
   const trimmedText = descriptionText.trim();
   const trimmedCardText = editTextCard.trim();
+  const columnName = column[card.columnId].textTitle;
 
   const toggleDescriptionEditable = () => {
     if (!isDescriptionEditable) {
@@ -59,8 +56,8 @@ export const CardPopup: FC<CardPopupProps> = ({
     setEditTextCard(trimmedCardText);
   };
 
-  const handleEditCard = (cardId: string, cardText: string) => {
-    editCardText(cardId, cardText);
+  const handleEditCard = () => {
+    onEditCardText(card.id, trimmedCardText);
     setEditTextCard(trimmedCardText);
   };
 
@@ -72,7 +69,7 @@ export const CardPopup: FC<CardPopupProps> = ({
 
   const handleBlur: React.ChangeEventHandler<HTMLTextAreaElement> = () => {
     if (trimmedCardText) {
-      handleEditCard(cardId, trimmedCardText);
+      handleEditCard();
     }
     setIsCardEditable(false);
   };
@@ -81,7 +78,7 @@ export const CardPopup: FC<CardPopupProps> = ({
     event: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
     if (event.code === "Enter") {
-      handleEditCard(cardId, editTextCard);
+      handleEditCard();
       setIsCardEditable(false);
     }
   };
@@ -89,7 +86,7 @@ export const CardPopup: FC<CardPopupProps> = ({
   const handleAddDiscription = () => {
     if (trimmedText) {
       setDescriptionText(trimmedText);
-      addDescription(trimmedText, cardId);
+      onAddDescription(trimmedText, card.id);
     }
   };
 
@@ -126,7 +123,7 @@ export const CardPopup: FC<CardPopupProps> = ({
                 </CardTitle>
               )}
 
-              <ColumnName>in list: {columnName} </ColumnName>
+              <ColumnName>in list: {columnName}</ColumnName>
             </Container>
             <AuthorName>{authorName}</AuthorName>
           </PopupHeader>
@@ -159,10 +156,10 @@ export const CardPopup: FC<CardPopupProps> = ({
             )}
           </Description>
           <Comments
-            cardId={cardId}
-            addComment={addComment}
-            deleteComment={deleteComment}
-            editComment={editComment}
+            cardId={card.id}
+            onAddComment={onAddComment}
+            onDeleteComment={onDeleteComment}
+            onEditComment={onEditComment}
             authorName={authorName}
             commentsData={comments}
           />

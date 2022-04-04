@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 
-import { Column } from "components";
+import { Column, CardPopup } from "components";
 import { useLocalStorage } from "hooks";
 import styled from "styled-components";
 import {
@@ -25,6 +25,8 @@ export const Board: FC<BoardProps> = ({ authorName }) => {
     commentsDefaultData
   );
 
+  const [currentCardId, setCurrentCardId] = useState("");
+
   const handleAddCard = (value: string, columnId: string) => {
     const id = uuidv4();
     const stateCardsCopy = Object.assign({}, cardsData);
@@ -43,6 +45,7 @@ export const Board: FC<BoardProps> = ({ authorName }) => {
     const stateCardsCopy = Object.assign({}, cardsData);
     delete stateCardsCopy[cardId];
     setCardsData(stateCardsCopy);
+    setCurrentCardId("");
   };
 
   const handleAddComment = (cardId: string, commentText: string) => {
@@ -88,26 +91,53 @@ export const Board: FC<BoardProps> = ({ authorName }) => {
     setColumnsData(stateColumnCopy);
   };
 
+  const handleCardClick = (id: string) => {
+    if (id) setCurrentCardId(id);
+  };
+
+  const handleKeyDownEsc = ({ key }: KeyboardEvent) => {
+    switch (key) {
+      case "Escape":
+        setCurrentCardId("");
+        break;
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDownEsc);
+    return () => document.removeEventListener("keydown", handleKeyDownEsc);
+  });
+
   return (
     <Root>
       {Object.values(columnsData).map((column) => (
         <Column
-          authorName={authorName}
           cards={cardsData}
           comments={commentsData}
           key={column.id}
           textTitle={column.textTitle}
           id={column.id}
-          addCard={handleAddCard}
-          deleteCard={handelDeleteCard}
-          addComment={handleAddComment}
-          addDescription={handleAddDescription}
-          deleteComment={handelDeleteComment}
-          editComment={handleEditComment}
-          editCardText={handleEditCardText}
-          editColumnName={handleEditColumnName}
+          onAddCard={handleAddCard}
+          onDeleteCard={handelDeleteCard}
+          onEditColumnName={handleEditColumnName}
+          onCardClick={handleCardClick}
         />
       ))}
+      {currentCardId && (
+        <CardPopup
+          authorName={authorName}
+          column={columnsData}
+          comments={commentsData}
+          card={cardsData[currentCardId]}
+          isVisible={true}
+          onClose={() => setCurrentCardId("")}
+          onAddComment={handleAddComment}
+          onDeleteComment={handelDeleteComment}
+          onAddDescription={handleAddDescription}
+          onEditComment={handleEditComment}
+          onEditCardText={handleEditCardText}
+        />
+      )}
     </Root>
   );
 };
