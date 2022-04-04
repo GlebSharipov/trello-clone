@@ -18,8 +18,9 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
     setName(e.target.value);
 
   return (
-    <Modal>
+    <Root>
       <StyledInput
+        maxLength={20}
         required
         value={name}
         onChange={handleChange}
@@ -31,9 +32,23 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
         text="Send"
         type="submit"
       />
-    </Modal>
+    </Root>
   );
 };
+
+const Root = styled(Modal)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 350px;
+  min-height: 25vh;
+  overflow: auto;
+  border: 1px solid ${COLORS.black};
+  background-color: ${COLORS.white};
+  border-radius: 10px;
+  padding: 40px;
+`;
 
 const StyledButton = styled(Button)`
   background-color: ${COLORS.gray};
@@ -48,5 +63,6 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledInput = styled(Input)`
+  max-lines: 20;
   font-size: 25px;
 `;

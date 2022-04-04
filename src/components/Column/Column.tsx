@@ -1,31 +1,50 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useMemo } from "react";
 
 import { Card } from "components";
-import { Button } from "components/UI";
+import { Button, ButtonCross } from "components/UI";
 import { COLORS } from "constant/colors";
+import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
-import { cardsDefaultData } from "utils/mock";
-import { v4 as uuidv4 } from "uuid";
+import { CardType, CommentType } from "types";
 
-import { CrossIcon } from "../icons/CrossIcon";
 import { InputTitle } from "./components";
 
 interface ColumnProps {
   textTitle: string;
   id: string;
+  cards: Record<string, CardType>;
+  comments: Record<string, CommentType>;
+  onAddCard: (value: string, columnId: string) => void;
+  onDeleteCard: (cardId: string) => void;
+  onEditColumnName: (columnId: string, columnName: string) => void;
+  onCardClick: (id: string) => void;
 }
 
-export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
+export const Column: FC<ColumnProps> = ({
+  textTitle,
+  id,
+  comments,
+  cards,
+  onAddCard,
+  onDeleteCard,
+  onEditColumnName,
+  onCardClick,
+}) => {
   const [isCardTitleEditable, setIsCardTitleEditable] = useState(false);
   const [cardText, setCardText] = useState("");
-  const [cards, setCards] = useState(cardsDefaultData);
   const trimmedText = cardText.trim();
+
+  const filteredCards = useMemo(
+    () => Object.values(cards).filter((card) => card.columnId === id),
+    [cards, id]
+  );
 
   const handleChangeText: React.ChangeEventHandler<HTMLTextAreaElement> = (
     e
   ) => {
     setCardText(e.target.value);
   };
+
   const toggleIsInputVisible = () => {
     if (!isCardTitleEditable) {
       setIsCardTitleEditable(true);
@@ -35,9 +54,8 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
   };
 
   const handleAddCard = () => {
-    const newCard = { text: trimmedText, id: uuidv4() };
     if (trimmedText) {
-      setCards((prevCards) => [...prevCards, newCard]);
+      onAddCard(trimmedText, id);
       setCardText("");
       setIsCardTitleEditable(false);
     }
@@ -50,7 +68,9 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
     setIsCardTitleEditable(false);
   };
 
-  const keyDownHandler = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handeleKeyDownEnter = (
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
     if (event.code === "Enter") {
       handleAddCard();
     }
@@ -58,10 +78,21 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
 
   return (
     <Root>
-      <InputTitle textTitle={textTitle} />
+      <InputTitle
+        columnId={id}
+        editColumnName={onEditColumnName}
+        textTitle={textTitle}
+      />
       <CardContainer>
-        {cards.map((card) => (
-          <Card key={card.id} text={card.text} id={card.id} />
+        {filteredCards.map((card) => (
+          <Card
+            comments={comments}
+            key={card.id}
+            text={card.text}
+            id={card.id}
+            onDeleteCard={onDeleteCard}
+            onCardClick={() => onCardClick(card.id)}
+          />
         ))}
       </CardContainer>
 
@@ -72,7 +103,7 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
       ) : (
         <Container>
           <InputAddCard
-            onKeyDown={keyDownHandler}
+            onKeyDown={handeleKeyDownEnter}
             autoFocus
             onBlur={handleBlur}
             value={cardText}
@@ -84,9 +115,7 @@ export const Column: FC<ColumnProps> = ({ textTitle, id }) => {
               text="Add card"
               onClick={handleAddCard}
             />
-            <ButtonCross onClick={toggleIsInputVisible}>
-              <StyledCrossIcon />
-            </ButtonCross>
+            <ButtonCross onClick={toggleIsInputVisible} />
           </ButtonContainer>
         </Container>
       )}
@@ -134,11 +163,11 @@ const ButtonContainer = styled.div`
   margin: 10px 0;
 `;
 
-const InputAddCard = styled.textarea`
+const InputAddCard = styled(TextareaAutosize)`
   font-size: 16px;
   width: 100%;
+  padding-bottom: 30px;
   background-color: ${COLORS.white};
-  padding-bottom: 50px;
   overflow: hidden;
   overflow-wrap: break-word;
   resize: none;
@@ -149,23 +178,8 @@ const StyledButton = styled(Button)`
   color: ${COLORS.white};
   background-color: ${COLORS.blue};
   margin: 0;
+  margin-right: 10px;
   &:hover {
     background-color: ${COLORS.dark_blue};
-  }
-`;
-
-const ButtonCross = styled.button`
-  width: 30px;
-  margin-left: 10px;
-  &:focus {
-    transform: translateY(-1px);
-  }
-`;
-const StyledCrossIcon = styled(CrossIcon)`
-  cursor: pointer;
-  width: 30px;
-  fill: ${COLORS.dark_gray};
-  &:hover {
-    fill: ${COLORS.black};
   }
 `;

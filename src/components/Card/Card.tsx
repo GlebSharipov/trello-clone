@@ -1,23 +1,49 @@
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
 
+import { ButtonCross } from "components/UI";
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
+import { CommentType } from "types";
 
-import { CrossIcon } from "../icons/CrossIcon";
+import { CommentIcon } from "../icons";
 
 interface CardProps {
   text: string;
   id: string;
+  comments: Record<string, CommentType>;
+  onDeleteCard: (cardId: string) => void;
+  onCardClick: () => void;
 }
 
-export const Card: FC<CardProps> = ({ text }) => {
+export const Card: FC<CardProps> = ({
+  text,
+  id,
+  comments,
+  onDeleteCard,
+  onCardClick,
+}) => {
+  const handleDeleteCard = () => {
+    onDeleteCard(id);
+  };
+
+  const countComment = useMemo(
+    () => Object.values(comments).filter((comment) => comment.cardId === id),
+    [comments, id]
+  );
+
   return (
-    <Root>
-      {text}
-      <CrossButton>
-        <StyledCrossIcon />
-      </CrossButton>
-    </Root>
+    <>
+      <Root>
+        <CardTextContainer onClick={onCardClick}> {text}</CardTextContainer>
+        {countComment.length !== 0 && (
+          <CountContainer>
+            {countComment.length}
+            <CommentIcon />
+          </CountContainer>
+        )}
+        <ButtonCross onClick={handleDeleteCard} />
+      </Root>
+    </>
   );
 };
 
@@ -39,16 +65,12 @@ const Root = styled.li`
   }
 `;
 
-const CrossButton = styled.button`
-  margin-left: 5px;
-  &:focus {
-    transform: translateY(-1px);
-  }
+const CardTextContainer = styled.div`
+  flex: 1;
 `;
 
-const StyledCrossIcon = styled(CrossIcon)`
-  fill: ${COLORS.dark_gray};
-  &:hover {
-    fill: ${COLORS.black};
-  }
+const CountContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 `;
