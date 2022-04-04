@@ -96,11 +96,7 @@ export const Column: FC<ColumnProps> = ({
         ))}
       </CardContainer>
 
-      {!isCardTitleEditable ? (
-        <AddCardButton onClick={toggleIsInputVisible}>
-          + Add a card
-        </AddCardButton>
-      ) : (
+      {isCardTitleEditable ? (
         <Container>
           <InputAddCard
             onKeyDown={handeleKeyDownEnter}
@@ -118,6 +114,10 @@ export const Column: FC<ColumnProps> = ({
             <ButtonCross onClick={toggleIsInputVisible} />
           </ButtonContainer>
         </Container>
+      ) : (
+        <AddCardButton onClick={toggleIsInputVisible}>
+          + Add a card
+        </AddCardButton>
       )}
     </Root>
   );

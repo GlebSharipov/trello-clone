@@ -6,14 +6,13 @@ import { ButtonCross } from "components/UI";
 import { COLORS } from "constant";
 import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
-import { CommentType, CardType, ColumnType } from "types";
+import { CommentType, CardType } from "types";
 
 interface CardPopupProps {
   authorName: string;
-  column: Record<string, ColumnType>;
   comments: Record<string, CommentType>;
-  isVisible: boolean;
   card: CardType;
+  columnName: string;
   onClose: () => void;
   onAddComment: (cardId: string, commentText: string) => void;
   onDeleteComment: (idCommet: string) => void;
@@ -23,11 +22,10 @@ interface CardPopupProps {
 }
 
 export const CardPopup: FC<CardPopupProps> = ({
-  isVisible,
   authorName,
-  column,
   comments,
   card,
+  columnName,
   onClose,
   onAddComment,
   onDeleteComment,
@@ -41,7 +39,6 @@ export const CardPopup: FC<CardPopupProps> = ({
   const [isCardEditable, setIsCardEditable] = useState(false);
   const trimmedText = descriptionText.trim();
   const trimmedCardText = editTextCard.trim();
-  const columnName = column[card.columnId].textTitle;
 
   const toggleDescriptionEditable = () => {
     if (!isDescriptionEditable) {
@@ -104,68 +101,63 @@ export const CardPopup: FC<CardPopupProps> = ({
   };
 
   return (
-    <>
-      {isVisible && (
-        <StyledModal isCloseButtonShowed onClose={onClose}>
-          <PopupHeader>
-            <Container>
-              {isCardEditable ? (
-                <CardTitleInput
-                  onKeyDown={handeleKeyDownEnter}
-                  onBlur={handleBlur}
-                  value={editTextCard}
-                  autoFocus
-                  onChange={handleChangeCardText}
-                />
-              ) : (
-                <CardTitle onClick={handleCardEditable}>
-                  {editTextCard}
-                </CardTitle>
-              )}
+    <StyledModal isCloseButtonShowed onClose={onClose}>
+      <PopupHeader>
+        <Container>
+          {isCardEditable ? (
+            <CardTitleInput
+              onKeyDown={handeleKeyDownEnter}
+              onBlur={handleBlur}
+              value={editTextCard}
+              autoFocus
+              onChange={handleChangeCardText}
+            />
+          ) : (
+            <CardTitle onClick={handleCardEditable}>{editTextCard}</CardTitle>
+          )}
 
-              <ColumnName>in list: {columnName}</ColumnName>
-            </Container>
-            <AuthorName>{authorName}</AuthorName>
-          </PopupHeader>
-          <Description>
-            <DescriptionTitle>Description</DescriptionTitle>
-            {!isDescriptionEditable ? (
-              <DescriptionFakeText onClick={toggleDescriptionEditable}>
-                {descriptionText
-                  ? descriptionText
-                  : "Add a more detailed description..."}
-              </DescriptionFakeText>
-            ) : (
-              <ContainerDescription>
-                <DescriptionText
-                  value={descriptionText}
-                  onBlur={handleBlurDescription}
-                  onChange={handleChangeTextDescription}
-                  autoFocus
-                  placeholder="Add a more detailed description..."
-                ></DescriptionText>
-                <ButtonContainer>
-                  <StyledButton
-                    text="Save"
-                    type="submit"
-                    onClick={handleAddDiscription}
-                  />
-                  <ButtonCross onClick={toggleDescriptionEditable} />
-                </ButtonContainer>
-              </ContainerDescription>
-            )}
-          </Description>
-          <Comments
-            cardId={card.id}
-            onAddComment={onAddComment}
-            onDeleteComment={onDeleteComment}
-            onEditComment={onEditComment}
-            authorName={authorName}
-            commentsData={comments}
-          />
-        </StyledModal>
-      )}
-    </>
+          <ColumnName>in list: {columnName}</ColumnName>
+        </Container>
+        <AuthorName>{authorName}</AuthorName>
+      </PopupHeader>
+      <Description>
+        <DescriptionTitle>Description</DescriptionTitle>
+        {isDescriptionEditable ? (
+          <ContainerDescription>
+            <DescriptionText
+              value={descriptionText}
+              onBlur={handleBlurDescription}
+              onChange={handleChangeTextDescription}
+              autoFocus
+              placeholder="Add a more detailed description..."
+            ></DescriptionText>
+            <ButtonContainer>
+              <StyledButton
+                text="Save"
+                type="submit"
+                onClick={handleAddDiscription}
+              />
+              <ButtonCross onClick={toggleDescriptionEditable} />
+            </ButtonContainer>
+          </ContainerDescription>
+        ) : (
+          <DescriptionFakeText onClick={toggleDescriptionEditable}>
+            {descriptionText
+              ? descriptionText
+              : "Add a more detailed description..."}
+          </DescriptionFakeText>
+        )}
+      </Description>
+
+      <Comments
+        cardId={card.id}
+        onAddComment={onAddComment}
+        onDeleteComment={onDeleteComment}
+        onEditComment={onEditComment}
+        authorName={authorName}
+        commentsData={comments}
+      />
+    </StyledModal>
   );
 };
 

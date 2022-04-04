@@ -123,13 +123,13 @@ export const Board: FC<BoardProps> = ({ authorName }) => {
           onCardClick={handleCardClick}
         />
       ))}
+
       {currentCardId && (
         <CardPopup
+          columnName={columnsData[cardsData[currentCardId].columnId].textTitle}
           authorName={authorName}
-          column={columnsData}
           comments={commentsData}
           card={cardsData[currentCardId]}
-          isVisible={true}
           onClose={() => setCurrentCardId("")}
           onAddComment={handleAddComment}
           onDeleteComment={handelDeleteComment}
