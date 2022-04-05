@@ -28,6 +28,9 @@ export const Board: FC<BoardProps> = ({ authorName }) => {
   const [currentCardId, setCurrentCardId] = useState("");
 
   const card = cardsData[currentCardId];
+  const columnId = card?.columnId;
+  const column = columnsData[columnId];
+  const columnName = column?.textTitle;
 
   const handleAddCard = (value: string, columnId: string) => {
     const id = uuidv4();
@@ -128,10 +131,10 @@ export const Board: FC<BoardProps> = ({ authorName }) => {
 
       {currentCardId && (
         <CardPopup
-          columnName={columnsData[card.columnId].textTitle}
+          columnName={columnName}
           authorName={authorName}
           comments={commentsData}
-          card={cardsData[currentCardId]}
+          card={card}
           onClose={() => setCurrentCardId("")}
           onAddComment={handleAddComment}
           onDeleteComment={handelDeleteComment}
