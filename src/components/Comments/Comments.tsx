@@ -64,11 +64,7 @@ export const Comments: FC<CommentsProps> = ({
   return (
     <Root>
       <CommentsTitle>Comments</CommentsTitle>
-      {!isCommentsEditable ? (
-        <CommentsFakeText onClick={handleCommentsEditable}>
-          Write a comment...
-        </CommentsFakeText>
-      ) : (
+      {isCommentsEditable ? (
         <AddComment>
           <AddCommentsText
             value={trimmedTextComment}
@@ -85,7 +81,12 @@ export const Comments: FC<CommentsProps> = ({
             />
           </ButtonContainer>
         </AddComment>
+      ) : (
+        <CommentsFakeText onClick={handleCommentsEditable}>
+          Write a comment...
+        </CommentsFakeText>
       )}
+
       <CommentsContainer>
         {filteredComment.map((comment) => (
           <CommentItem

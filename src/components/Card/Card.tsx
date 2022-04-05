@@ -41,6 +41,7 @@ export const Card: FC<CardProps> = ({
             <CommentIcon />
           </CountContainer>
         )}
+
         <ButtonCross onClick={handleDeleteCard} />
       </Root>
     </>
