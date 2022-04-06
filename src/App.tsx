@@ -9,6 +9,10 @@ import { UserNamePopup, Board, Header } from "./components";
 const App: FC = () => {
   const [authorName, setAuthorName] = useLocalStorage("AuthorName", "");
 
+  const handleUpdateUser = (name: string) => {
+    setAuthorName(name);
+  };
+
   return (
     <Root>
       <Header authorName={authorName} />
@@ -17,7 +21,7 @@ const App: FC = () => {
       ) : (
         <UserNamePopup
           isVisible={authorName.length === 0}
-          setUserName={setAuthorName}
+          onUpdateUser={handleUpdateUser}
         />
       )}
     </Root>

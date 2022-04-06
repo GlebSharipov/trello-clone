@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 
 import { COLORS } from "constant/colors";
-import { addUserName } from "store/ducks/user/user";
+import { addUserName } from "store/ducks/user/userSlice";
 import { useAppSelector, useAppDispatch } from "store/store";
 import { RootState } from "store/store";
 import styled from "styled-components";
@@ -9,11 +9,11 @@ import styled from "styled-components";
 import { Input, Button, Modal } from "../UI";
 
 interface UserNamePopupProps {
-  setUserName: React.Dispatch<React.SetStateAction<string>>;
+  onUpdateUser: (name: string) => void;
   isVisible: boolean;
 }
 
-export const UserNamePopup: FC<UserNamePopupProps> = ({ setUserName }) => {
+export const UserNamePopup: FC<UserNamePopupProps> = ({ onUpdateUser }) => {
   const userName = useAppSelector((state: RootState) => state.user.userName);
   const dispatch = useAppDispatch();
   const [name, setName] = useState(userName);
@@ -25,7 +25,7 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ setUserName }) => {
 
   const handleAddName = () => {
     if (trimmedName) {
-      setUserName(trimmedName);
+      onUpdateUser(trimmedName);
       dispatch(addUserName(trimmedName));
     }
   };
