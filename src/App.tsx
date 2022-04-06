@@ -17,7 +17,7 @@ const App: FC = () => {
       ) : (
         <UserNamePopup
           isVisible={authorName.length === 0}
-          onUserNameChange={setAuthorName}
+          setUserName={setAuthorName}
         />
       )}
     </Root>

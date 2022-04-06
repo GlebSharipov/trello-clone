@@ -1,21 +1,34 @@
 import React, { FC, useState } from "react";
 
 import { COLORS } from "constant/colors";
+import { addUserName } from "store/ducks/user/user";
+import { useAppSelector, useAppDispatch } from "store/store";
+import { RootState } from "store/store";
 import styled from "styled-components";
 
 import { Input, Button, Modal } from "../UI";
 
 interface UserNamePopupProps {
-  onUserNameChange: (name: string) => void;
+  setUserName: React.Dispatch<React.SetStateAction<string>>;
   isVisible: boolean;
 }
 
-export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
-  const [name, setName] = useState("");
+export const UserNamePopup: FC<UserNamePopupProps> = ({ setUserName }) => {
+  const userName = useAppSelector((state: RootState) => state.user.userName);
+  const dispatch = useAppDispatch();
+  const [name, setName] = useState(userName);
   const trimmedName = name.trim();
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
-    setName(e.target.value);
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setName(e.currentTarget.value);
+  };
+
+  const handleAddName = () => {
+    if (trimmedName) {
+      setUserName(trimmedName);
+      dispatch(addUserName(trimmedName));
+    }
+  };
 
   return (
     <Root>
@@ -27,11 +40,7 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ onUserNameChange }) => {
         type="text"
         placeholder="Enter your name"
       />
-      <StyledButton
-        onClick={() => onUserNameChange(trimmedName)}
-        text="Send"
-        type="submit"
-      />
+      <StyledButton onClick={handleAddName} text="Send" type="submit" />
     </Root>
   );
 };
