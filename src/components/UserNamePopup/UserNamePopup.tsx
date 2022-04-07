@@ -14,7 +14,9 @@ interface UserNamePopupProps {
 }
 
 export const UserNamePopup: FC<UserNamePopupProps> = ({ onUpdateUser }) => {
-  const userName = useAppSelector((state: RootState) => state.user.userName);
+  const userName = useAppSelector(
+    (state: RootState) => state.UserReducer.userName
+  );
   const dispatch = useAppDispatch();
   const [name, setName] = useState(userName);
   const trimmedName = name.trim();

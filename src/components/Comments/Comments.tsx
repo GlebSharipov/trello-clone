@@ -3,44 +3,38 @@ import React, { FC, useState, useMemo } from "react";
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
 import TextareaAutosize from "react-textarea-autosize";
+import { addComment } from "store/ducks/comment/commentSlice";
+import { useAppSelector, useAppDispatch } from "store/store";
+import { RootState } from "store/store";
 import styled from "styled-components";
-import { CommentType } from "types";
 
 import { CommentItem } from "./components";
 
 interface CommentsProps {
   authorName: string;
-  commentsData: Record<string, CommentType>;
   cardId: string;
-  onAddComment: (cardId: string, commentText: string) => void;
-  onDeleteComment: (idCommet: string) => void;
-  onEditComment: (comment: string, commentId: string) => void;
 }
 
-export const Comments: FC<CommentsProps> = ({
-  cardId,
-  commentsData,
-  authorName,
-  onAddComment,
-  onDeleteComment,
-  onEditComment,
-}) => {
+export const Comments: FC<CommentsProps> = ({ cardId, authorName }) => {
+  const comments = useAppSelector((state: RootState) => state.CommentReducer);
+  const dispatch = useAppDispatch();
+
   const [isCommentsEditable, setIsCommentsEditable] = useState(false);
   const [commentText, setCommentText] = useState("");
   const trimmedTextComment = commentText.trim();
 
   const filteredComment = useMemo(
-    () =>
-      Object.values(commentsData).filter(
-        (comment) => comment.cardId === cardId
-      ),
-    [commentsData, cardId]
+    () => comments.filter((comment) => comment.cardId === cardId),
+    [comments, cardId]
   );
 
   const handleAddComment = () => {
-    onAddComment(cardId, trimmedTextComment);
-    setCommentText("");
-    setIsCommentsEditable(false);
+    if (trimmedTextComment) {
+      setCommentText(trimmedTextComment);
+      dispatch(addComment({ cardId: cardId, commentText: trimmedTextComment }));
+      setCommentText("");
+      setIsCommentsEditable(false);
+    }
   };
 
   const handleCommentsEditable = () => {
@@ -94,8 +88,6 @@ export const Comments: FC<CommentsProps> = ({
             commentId={comment.id}
             commentText={comment.commentText}
             authorName={authorName}
-            onDeleteComment={onDeleteComment}
-            onEditComment={onEditComment}
           />
         ))}
       </CommentsContainer>

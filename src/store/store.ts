@@ -1,12 +1,20 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 
+import { CardReducer } from "./ducks/card";
+import { ColumnReducer } from "./ducks/column";
+import { CommentReducer } from "./ducks/comment";
 import { UserReducer } from "./ducks/user";
 
+const rootReducer = combineReducers({
+  UserReducer,
+  CardReducer,
+  CommentReducer,
+  ColumnReducer,
+});
+
 export const store = configureStore({
-  reducer: {
-    user: UserReducer,
-  },
+  reducer: rootReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

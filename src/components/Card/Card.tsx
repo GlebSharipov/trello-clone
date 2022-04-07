@@ -2,39 +2,36 @@ import React, { FC, useMemo } from "react";
 
 import { ButtonCross } from "components/UI";
 import { COLORS } from "constant/colors";
+import { deleteCard } from "store/ducks/card/cardSlice";
+import { RootState } from "store/store";
+import { useAppDispatch, useAppSelector } from "store/store";
 import styled from "styled-components";
-import { CommentType } from "types";
 
 import { CommentIcon } from "../icons";
 
 interface CardProps {
   text: string;
   id: string;
-  comments: Record<string, CommentType>;
-  onDeleteCard: (cardId: string) => void;
   onCardClick: () => void;
 }
 
-export const Card: FC<CardProps> = ({
-  text,
-  id,
-  comments,
-  onDeleteCard,
-  onCardClick,
-}) => {
+export const Card: FC<CardProps> = ({ text, id, onCardClick }) => {
+  const dispatch = useAppDispatch();
+  const comments = useAppSelector((state: RootState) => state.CommentReducer);
+
   const handleDeleteCard = () => {
-    onDeleteCard(id);
+    dispatch(deleteCard({ id }));
   };
 
   const countComment = useMemo(
-    () => Object.values(comments).filter((comment) => comment.cardId === id),
+    () => comments.filter((comment) => comment.cardId === id),
     [comments, id]
   );
 
   return (
     <>
       <Root>
-        <CardTextContainer onClick={onCardClick}> {text}</CardTextContainer>
+        <CardTextContainer onClick={onCardClick}>{text}</CardTextContainer>
         {countComment.length !== 0 && (
           <CountContainer>
             {countComment.length}

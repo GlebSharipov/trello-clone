@@ -2,19 +2,17 @@ import React, { FC, useState } from "react";
 
 import { Input } from "components/UI";
 import { COLORS } from "constant/colors";
+import { updateColumnName } from "store/ducks/column/columnSlice";
+import { useAppDispatch } from "store/store";
 import styled from "styled-components";
 
 interface InputTitleProps {
   textTitle: string;
   columnId: string;
-  editColumnName: (columnId: string, columnName: string) => void;
 }
 
-export const InputTitle: FC<InputTitleProps> = ({
-  textTitle,
-  columnId,
-  editColumnName,
-}) => {
+export const InputTitle: FC<InputTitleProps> = ({ textTitle, columnId }) => {
+  const dispatch = useAppDispatch();
   const [isColumnTitleEditable, setIsColumnTitleEditable] = useState(false);
   const [columnName, setColumnName] = useState(textTitle);
   const trimmedColumnName = columnName.trim();
@@ -30,7 +28,9 @@ export const InputTitle: FC<InputTitleProps> = ({
     setColumnName(e.target.value);
     if (trimmedColumnName) {
       setColumnName(trimmedColumnName);
-      editColumnName(columnId, columnName);
+      dispatch(
+        updateColumnName({ id: columnId, textTitle: trimmedColumnName })
+      );
       setIsColumnTitleEditable(false);
     }
   };
@@ -38,7 +38,9 @@ export const InputTitle: FC<InputTitleProps> = ({
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === "Enter") {
       if (trimmedColumnName) {
-        editColumnName(columnId, columnName);
+        dispatch(
+          updateColumnName({ id: columnId, textTitle: trimmedColumnName })
+        );
         setIsColumnTitleEditable(false);
       }
     }
@@ -55,7 +57,7 @@ export const InputTitle: FC<InputTitleProps> = ({
           type="text"
         />
       ) : (
-        <Title onClick={handleShowInputColumn}>{columnName}</Title>
+        <Title onClick={handleShowInputColumn}>{textTitle}</Title>
       )}
     </Root>
   );
