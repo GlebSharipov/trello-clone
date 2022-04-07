@@ -1,8 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 
 import { Column, CardPopup } from "components";
-import { useAppSelector } from "store/store";
-import { RootState } from "store/store";
+import { useAppSelector, RootState } from "store/store";
 import styled from "styled-components";
 
 interface BoardProps {
@@ -10,7 +9,7 @@ interface BoardProps {
 }
 
 export const Board: FC<BoardProps> = ({ authorName }) => {
-  const columns = useAppSelector((state: RootState) => state.ColumnReducer);
+  const columns = useAppSelector((state: RootState) => state.columns);
   const [currentCardId, setCurrentCardId] = useState("");
 
   const handleCardClick = (id: string) => {
@@ -35,7 +34,7 @@ export const Board: FC<BoardProps> = ({ authorName }) => {
       {columns.map((column) => (
         <Column
           key={column.id}
-          textTitle={column.textTitle}
+          columnName={column.columnName}
           id={column.id}
           onCardClick={handleCardClick}
         />

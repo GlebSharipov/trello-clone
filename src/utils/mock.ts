@@ -11,21 +11,21 @@ export const cardsDefaultData: Record<string, CardType> = {
   },
 };
 
-export const columnsDefaultData: Record<string, ColumnType> = {
-  "0": {
+export const columnsDefaultData: ColumnType[] = [
+  {
     id: "0",
-    textTitle: "TODO",
+    columnName: "TODO",
   },
-  "1": {
+  {
     id: "1",
-    textTitle: "In Progress",
+    columnName: "In Progress",
   },
-  "2": {
+  {
     id: "2",
-    textTitle: "Testing",
+    columnName: "Testing",
   },
-  "3": {
+  {
     id: "3",
-    textTitle: "Done",
+    columnName: "Done",
   },
-};
+];

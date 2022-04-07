@@ -5,8 +5,9 @@ import { Modal, Button } from "components/UI";
 import { ButtonCross } from "components/UI";
 import { COLORS } from "constant";
 import TextareaAutosize from "react-textarea-autosize";
-import { selectors } from "store/ducks";
-import { updateCardText, updateDescription } from "store/ducks/card/cardSlice";
+import { updateCardText, updateDescription } from "store/ducks/cards";
+import { selectCardById } from "store/ducks/cards/selectors";
+import { selectColumnNameById } from "store/ducks/columns/selectors";
 import { useAppSelector, useAppDispatch } from "store/store";
 import styled from "styled-components";
 
@@ -22,12 +23,10 @@ export const CardPopup: FC<CardPopupProps> = ({
   onClose,
 }) => {
   const dispatch = useAppDispatch();
-  const card = useAppSelector(selectors.card.selectCardById(cardId));
+  const card = useAppSelector(selectCardById(cardId));
 
   const columnId = card?.columnId;
-  const columnName = useAppSelector(
-    selectors.column.selectTextTitleById(columnId)
-  );
+  const columnName = useAppSelector(selectColumnNameById(columnId));
 
   const cardText = card?.text;
   const description = card?.description;
@@ -36,7 +35,7 @@ export const CardPopup: FC<CardPopupProps> = ({
   const [descriptionText, setDescriptionText] = useState(description);
   const [editTextCard, setEditTextCard] = useState(cardText);
   const [isCardEditable, setIsCardEditable] = useState(false);
-  const trimmedText = descriptionText?.trim();
+  const trimmedDescription = descriptionText?.trim();
   const trimmedCardText = editTextCard?.trim();
 
   const toggleDescriptionEditable = () => {
@@ -48,14 +47,10 @@ export const CardPopup: FC<CardPopupProps> = ({
   };
 
   const handleCardEditable = () => {
-    if (trimmedCardText) {
-      setEditTextCard(trimmedCardText);
-      setIsCardEditable(true);
-      dispatch(updateCardText({ id: cardId, cardText: trimmedCardText }));
-    }
+    setIsCardEditable(true);
   };
 
-  const handleEditCard = () => {
+  const handleUpdateCard = () => {
     if (trimmedCardText) {
       setEditTextCard(trimmedCardText);
       dispatch(updateCardText({ id: cardId, cardText: trimmedCardText }));
@@ -70,7 +65,7 @@ export const CardPopup: FC<CardPopupProps> = ({
 
   const handleBlur: React.ChangeEventHandler<HTMLTextAreaElement> = () => {
     if (trimmedCardText) {
-      handleEditCard();
+      handleUpdateCard();
     }
     setIsCardEditable(false);
   };
@@ -79,15 +74,17 @@ export const CardPopup: FC<CardPopupProps> = ({
     event: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
     if (event.code === "Enter") {
-      handleEditCard();
+      handleUpdateCard();
       setIsCardEditable(false);
     }
   };
 
   const handleAddDiscription = () => {
-    if (trimmedText) {
-      setDescriptionText(trimmedText);
-      dispatch(updateDescription({ id: cardId, description: trimmedText }));
+    if (trimmedDescription) {
+      setDescriptionText(trimmedDescription);
+      dispatch(
+        updateDescription({ id: cardId, description: trimmedDescription })
+      );
     }
   };
 

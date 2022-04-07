@@ -1,16 +1,16 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 
-import { CardReducer } from "./ducks/card";
-import { ColumnReducer } from "./ducks/column";
-import { CommentReducer } from "./ducks/comment";
+import { CardReducer } from "./ducks/cards";
+import { ColumnReducer } from "./ducks/columns";
+import { CommentReducer } from "./ducks/comments";
 import { UserReducer } from "./ducks/user";
 
 const rootReducer = combineReducers({
-  UserReducer,
-  CardReducer,
-  CommentReducer,
-  ColumnReducer,
+  user: UserReducer,
+  cards: CardReducer,
+  comments: CommentReducer,
+  columns: ColumnReducer,
 });
 
 export const store = configureStore({

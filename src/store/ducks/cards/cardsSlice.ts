@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CardType } from "types";
 import { v4 as uuidv4 } from "uuid";
 
-export const cardSlice = createSlice({
-  name: "card",
+export const cardsSlice = createSlice({
+  name: "cards",
   initialState: [] as CardType[],
   reducers: {
     addNewCard: (
@@ -48,6 +48,6 @@ export const cardSlice = createSlice({
 });
 
 export const { addNewCard, deleteCard, updateDescription, updateCardText } =
-  cardSlice.actions;
+  cardsSlice.actions;
 
-export default cardSlice.reducer;
+export default cardsSlice.reducer;

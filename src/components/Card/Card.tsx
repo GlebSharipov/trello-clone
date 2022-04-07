@@ -2,9 +2,8 @@ import React, { FC, useMemo } from "react";
 
 import { ButtonCross } from "components/UI";
 import { COLORS } from "constant/colors";
-import { deleteCard } from "store/ducks/card/cardSlice";
-import { RootState } from "store/store";
-import { useAppDispatch, useAppSelector } from "store/store";
+import { deleteCard } from "store/ducks/cards";
+import { useAppDispatch, useAppSelector, RootState } from "store/store";
 import styled from "styled-components";
 
 import { CommentIcon } from "../icons";
@@ -17,7 +16,7 @@ interface CardProps {
 
 export const Card: FC<CardProps> = ({ text, id, onCardClick }) => {
   const dispatch = useAppDispatch();
-  const comments = useAppSelector((state: RootState) => state.CommentReducer);
+  const comments = useAppSelector((state: RootState) => state.comments);
 
   const handleDeleteCard = () => {
     dispatch(deleteCard({ id }));

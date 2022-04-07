@@ -3,7 +3,7 @@ import React, { FC, useState } from "react";
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
 import TextareaAutosize from "react-textarea-autosize";
-import { deleteComment, updateComment } from "store/ducks/comment/commentSlice";
+import { deleteComment, updateComment } from "store/ducks/comments";
 import { useAppDispatch } from "store/store";
 import styled from "styled-components";
 

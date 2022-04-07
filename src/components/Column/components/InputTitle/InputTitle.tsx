@@ -2,34 +2,34 @@ import React, { FC, useState } from "react";
 
 import { Input } from "components/UI";
 import { COLORS } from "constant/colors";
-import { updateColumnName } from "store/ducks/column/columnSlice";
+import { updateColumnName } from "store/ducks/columns";
 import { useAppDispatch } from "store/store";
 import styled from "styled-components";
 
 interface InputTitleProps {
-  textTitle: string;
+  columnName: string;
   columnId: string;
 }
 
-export const InputTitle: FC<InputTitleProps> = ({ textTitle, columnId }) => {
+export const InputTitle: FC<InputTitleProps> = ({ columnName, columnId }) => {
   const dispatch = useAppDispatch();
   const [isColumnTitleEditable, setIsColumnTitleEditable] = useState(false);
-  const [columnName, setColumnName] = useState(textTitle);
+  const [changeСolumnName, setChangeColumnName] = useState(columnName);
   const trimmedColumnName = columnName.trim();
 
   const handleChangeColumn: React.ChangeEventHandler<HTMLInputElement> = (e) =>
-    setColumnName(e.target.value);
+    setChangeColumnName(e.target.value);
 
   const handleShowInputColumn = () => {
     setIsColumnTitleEditable(true);
   };
 
   const handleBlur: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setColumnName(e.target.value);
+    setChangeColumnName(e.target.value);
     if (trimmedColumnName) {
-      setColumnName(trimmedColumnName);
+      setChangeColumnName(trimmedColumnName);
       dispatch(
-        updateColumnName({ id: columnId, textTitle: trimmedColumnName })
+        updateColumnName({ id: columnId, columnName: trimmedColumnName })
       );
       setIsColumnTitleEditable(false);
     }
@@ -39,7 +39,7 @@ export const InputTitle: FC<InputTitleProps> = ({ textTitle, columnId }) => {
     if (event.code === "Enter") {
       if (trimmedColumnName) {
         dispatch(
-          updateColumnName({ id: columnId, textTitle: trimmedColumnName })
+          updateColumnName({ id: columnId, columnName: trimmedColumnName })
         );
         setIsColumnTitleEditable(false);
       }
@@ -53,11 +53,11 @@ export const InputTitle: FC<InputTitleProps> = ({ textTitle, columnId }) => {
           onKeyDown={keyDownHandler}
           onBlur={handleBlur}
           onChange={handleChangeColumn}
-          value={columnName}
+          value={changeСolumnName}
           type="text"
         />
       ) : (
-        <Title onClick={handleShowInputColumn}>{textTitle}</Title>
+        <Title onClick={handleShowInputColumn}>{columnName}</Title>
       )}
     </Root>
   );

@@ -4,21 +4,20 @@ import { Card } from "components";
 import { Button, ButtonCross } from "components/UI";
 import { COLORS } from "constant/colors";
 import TextareaAutosize from "react-textarea-autosize";
-import { addNewCard } from "store/ducks/card/cardSlice";
-import { useAppSelector, useAppDispatch } from "store/store";
-import { RootState } from "store/store";
+import { addNewCard } from "store/ducks/cards";
+import { useAppSelector, useAppDispatch, RootState } from "store/store";
 import styled from "styled-components";
 
 import { InputTitle } from "./components";
 
 interface ColumnProps {
-  textTitle: string;
+  columnName: string;
   id: string;
   onCardClick: (id: string) => void;
 }
 
-export const Column: FC<ColumnProps> = ({ textTitle, id, onCardClick }) => {
-  const cards = useAppSelector((state: RootState) => state.CardReducer);
+export const Column: FC<ColumnProps> = ({ columnName, id, onCardClick }) => {
+  const cards = useAppSelector((state: RootState) => state.cards);
   const dispatch = useAppDispatch();
 
   const [isCardTitleEditable, setIsCardTitleEditable] = useState(false);
@@ -70,7 +69,7 @@ export const Column: FC<ColumnProps> = ({ textTitle, id, onCardClick }) => {
 
   return (
     <Root>
-      <InputTitle columnId={id} textTitle={textTitle} />
+      <InputTitle columnId={id} columnName={columnName} />
       <CardContainer>
         {filteredCards.map((card) => (
           <Card
