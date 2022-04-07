@@ -10,11 +10,11 @@ import styled from "styled-components";
 import { CommentItem } from "./components";
 
 interface CommentsProps {
-  authorName: string;
+  userName: string;
   cardId: string;
 }
 
-export const Comments: FC<CommentsProps> = ({ cardId, authorName }) => {
+export const Comments: FC<CommentsProps> = ({ cardId, userName }) => {
   const comments = useAppSelector((state: RootState) => state.comments);
   const dispatch = useAppDispatch();
 
@@ -86,7 +86,7 @@ export const Comments: FC<CommentsProps> = ({ cardId, authorName }) => {
             key={comment.id}
             commentId={comment.id}
             commentText={comment.commentText}
-            authorName={authorName}
+            userName={userName}
           />
         ))}
       </CommentsContainer>

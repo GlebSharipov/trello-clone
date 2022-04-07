@@ -7,12 +7,7 @@ import styled from "styled-components";
 
 import { Input, Button, Modal } from "../UI";
 
-interface UserNamePopupProps {
-  onUpdateUser: (name: string) => void;
-  isVisible: boolean;
-}
-
-export const UserNamePopup: FC<UserNamePopupProps> = ({ onUpdateUser }) => {
+export const UserNamePopup: FC = () => {
   const userName = useAppSelector((state: RootState) => state.user.userName);
   const dispatch = useAppDispatch();
   const [name, setName] = useState(userName);
@@ -24,7 +19,6 @@ export const UserNamePopup: FC<UserNamePopupProps> = ({ onUpdateUser }) => {
 
   const handleAddName = () => {
     if (trimmedName) {
-      onUpdateUser(trimmedName);
       dispatch(addUserName(trimmedName));
     }
   };

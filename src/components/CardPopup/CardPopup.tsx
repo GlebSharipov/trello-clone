@@ -12,13 +12,13 @@ import { useAppSelector, useAppDispatch } from "store/store";
 import styled from "styled-components";
 
 interface CardPopupProps {
-  authorName: string;
+  userName: string;
   cardId: string;
   onClose: () => void;
 }
 
 export const CardPopup: FC<CardPopupProps> = ({
-  authorName,
+  userName,
   cardId,
   onClose,
 }) => {
@@ -119,7 +119,7 @@ export const CardPopup: FC<CardPopupProps> = ({
 
           <ColumnName>in list: {columnName}</ColumnName>
         </Container>
-        <AuthorName>{authorName}</AuthorName>
+        <AuthorName>{userName}</AuthorName>
       </PopupHeader>
       <Description>
         <DescriptionTitle>Description</DescriptionTitle>
@@ -150,7 +150,7 @@ export const CardPopup: FC<CardPopupProps> = ({
         )}
       </Description>
 
-      <Comments cardId={cardId} authorName={authorName} />
+      <Comments cardId={cardId} userName={userName} />
     </StyledModal>
   );
 };

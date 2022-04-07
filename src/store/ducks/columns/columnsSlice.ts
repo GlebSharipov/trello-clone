@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { columnsDefaultData } from "utils/mock";
 
 export const columnsSlice = createSlice({
-  name: "columns",
+  name: "column",
   initialState: columnsDefaultData,
   reducers: {
     updateColumnName: (

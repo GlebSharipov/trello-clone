@@ -4,14 +4,14 @@ import { COLORS } from "constant/colors";
 import styled from "styled-components";
 
 interface HeaderProps {
-  authorName: string;
+  userName: string;
 }
 
-export const Header: FC<HeaderProps> = ({ authorName }) => {
+export const Header: FC<HeaderProps> = ({ userName }) => {
   return (
     <Root>
       <Title>Trello-Clone</Title>
-      {authorName}
+      {userName}
     </Root>
   );
 };

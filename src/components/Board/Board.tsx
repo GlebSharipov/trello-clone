@@ -5,10 +5,10 @@ import { useAppSelector, RootState } from "store/store";
 import styled from "styled-components";
 
 interface BoardProps {
-  authorName: string;
+  userName: string;
 }
 
-export const Board: FC<BoardProps> = ({ authorName }) => {
+export const Board: FC<BoardProps> = ({ userName }) => {
   const columns = useAppSelector((state: RootState) => state.columns);
   const [currentCardId, setCurrentCardId] = useState("");
 
@@ -42,7 +42,7 @@ export const Board: FC<BoardProps> = ({ authorName }) => {
 
       {currentCardId && (
         <CardPopup
-          authorName={authorName}
+          userName={userName}
           cardId={currentCardId}
           onClose={() => setCurrentCardId("")}
         />

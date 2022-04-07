@@ -15,7 +15,7 @@ export const InputTitle: FC<InputTitleProps> = ({ columnName, columnId }) => {
   const dispatch = useAppDispatch();
   const [isColumnTitleEditable, setIsColumnTitleEditable] = useState(false);
   const [changeСolumnName, setChangeColumnName] = useState(columnName);
-  const trimmedColumnName = columnName.trim();
+  const trimmedColumnName = changeСolumnName.trim();
 
   const handleChangeColumn: React.ChangeEventHandler<HTMLInputElement> = (e) =>
     setChangeColumnName(e.target.value);

@@ -8,13 +8,13 @@ import { useAppDispatch } from "store/store";
 import styled from "styled-components";
 
 interface CommentItemProps {
-  authorName: string;
+  userName: string;
   commentId: string;
   commentText: string;
 }
 
 export const CommentItem: FC<CommentItemProps> = ({
-  authorName,
+  userName,
   commentId,
   commentText,
 }) => {
@@ -49,7 +49,7 @@ export const CommentItem: FC<CommentItemProps> = ({
     <Root>
       {!isCommentEdit ? (
         <>
-          <AuthorName>{authorName}</AuthorName>
+          <AuthorName>{userName}</AuthorName>
           <TextComment>{commentText}</TextComment>
           <ButtonContainerComment>
             <ButtonEdit onClick={handleVisibleCommentEdit}>Edit</ButtonEdit>
