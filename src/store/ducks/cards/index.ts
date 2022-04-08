@@ -1,4 +1,4 @@
-export * as selectors from "./selectors";
+export { selectCardById } from "./selectors";
 export {
   addNewCard,
   deleteCard,

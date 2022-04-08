@@ -6,8 +6,8 @@ import { ButtonCross } from "components/UI";
 import { COLORS } from "constant";
 import TextareaAutosize from "react-textarea-autosize";
 import { updateCardText, updateDescription } from "store/ducks/cards";
-import { selectCardById } from "store/ducks/cards/selectors";
-import { selectColumnNameById } from "store/ducks/columns/selectors";
+import { selectCardById } from "store/ducks/cards";
+import { selectColumnNameById } from "store/ducks/columns";
 import { useAppSelector, useAppDispatch } from "store/store";
 import styled from "styled-components";
 
