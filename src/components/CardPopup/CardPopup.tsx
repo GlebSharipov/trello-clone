@@ -6,19 +6,19 @@ import { ButtonCross } from "components/UI";
 import { COLORS } from "constant";
 import TextareaAutosize from "react-textarea-autosize";
 import { updateCardText, updateDescription } from "store/ducks/cards";
-import { selectCardById } from "store/ducks/cards/selectors";
-import { selectColumnNameById } from "store/ducks/columns/selectors";
+import { selectCardById } from "store/ducks/cards";
+import { selectColumnNameById } from "store/ducks/columns";
 import { useAppSelector, useAppDispatch } from "store/store";
 import styled from "styled-components";
 
 interface CardPopupProps {
-  authorName: string;
+  userName: string;
   cardId: string;
   onClose: () => void;
 }
 
 export const CardPopup: FC<CardPopupProps> = ({
-  authorName,
+  userName,
   cardId,
   onClose,
 }) => {
@@ -119,7 +119,7 @@ export const CardPopup: FC<CardPopupProps> = ({
 
           <ColumnName>in list: {columnName}</ColumnName>
         </Container>
-        <AuthorName>{authorName}</AuthorName>
+        <AuthorName>{userName}</AuthorName>
       </PopupHeader>
       <Description>
         <DescriptionTitle>Description</DescriptionTitle>
@@ -150,7 +150,7 @@ export const CardPopup: FC<CardPopupProps> = ({
         )}
       </Description>
 
-      <Comments cardId={cardId} authorName={authorName} />
+      <Comments cardId={cardId} userName={userName} />
     </StyledModal>
   );
 };
