@@ -4,38 +4,28 @@ import { Card } from "components";
 import { Button, ButtonCross } from "components/UI";
 import { COLORS } from "constant/colors";
 import TextareaAutosize from "react-textarea-autosize";
+import { addNewCard } from "store/ducks/cards";
+import { useAppSelector, useAppDispatch, RootState } from "store/store";
 import styled from "styled-components";
-import { CardType, CommentType } from "types";
 
 import { InputTitle } from "./components";
 
 interface ColumnProps {
-  textTitle: string;
+  columnName: string;
   id: string;
-  cards: Record<string, CardType>;
-  comments: Record<string, CommentType>;
-  onAddCard: (value: string, columnId: string) => void;
-  onDeleteCard: (cardId: string) => void;
-  onEditColumnName: (columnId: string, columnName: string) => void;
   onCardClick: (id: string) => void;
 }
 
-export const Column: FC<ColumnProps> = ({
-  textTitle,
-  id,
-  comments,
-  cards,
-  onAddCard,
-  onDeleteCard,
-  onEditColumnName,
-  onCardClick,
-}) => {
+export const Column: FC<ColumnProps> = ({ columnName, id, onCardClick }) => {
+  const cards = useAppSelector((state: RootState) => state.cards);
+  const dispatch = useAppDispatch();
+
   const [isCardTitleEditable, setIsCardTitleEditable] = useState(false);
   const [cardText, setCardText] = useState("");
   const trimmedText = cardText.trim();
 
   const filteredCards = useMemo(
-    () => Object.values(cards).filter((card) => card.columnId === id),
+    () => cards.filter((card) => card.columnId === id),
     [cards, id]
   );
 
@@ -55,7 +45,8 @@ export const Column: FC<ColumnProps> = ({
 
   const handleAddCard = () => {
     if (trimmedText) {
-      onAddCard(trimmedText, id);
+      setCardText(trimmedText);
+      dispatch(addNewCard({ columnId: id, cardText: trimmedText }));
       setCardText("");
       setIsCardTitleEditable(false);
     }
@@ -78,19 +69,13 @@ export const Column: FC<ColumnProps> = ({
 
   return (
     <Root>
-      <InputTitle
-        columnId={id}
-        editColumnName={onEditColumnName}
-        textTitle={textTitle}
-      />
+      <InputTitle columnId={id} columnName={columnName} />
       <CardContainer>
         {filteredCards.map((card) => (
           <Card
-            comments={comments}
             key={card.id}
             text={card.text}
             id={card.id}
-            onDeleteCard={onDeleteCard}
             onCardClick={() => onCardClick(card.id)}
           />
         ))}

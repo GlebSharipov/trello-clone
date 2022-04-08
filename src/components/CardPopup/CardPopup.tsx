@@ -5,40 +5,38 @@ import { Modal, Button } from "components/UI";
 import { ButtonCross } from "components/UI";
 import { COLORS } from "constant";
 import TextareaAutosize from "react-textarea-autosize";
+import { updateCardText, updateDescription } from "store/ducks/cards";
+import { selectCardById } from "store/ducks/cards/selectors";
+import { selectColumnNameById } from "store/ducks/columns/selectors";
+import { useAppSelector, useAppDispatch } from "store/store";
 import styled from "styled-components";
-import { CommentType, CardType } from "types";
 
 interface CardPopupProps {
   authorName: string;
-  comments: Record<string, CommentType>;
-  card: CardType;
-  columnName: string;
+  cardId: string;
   onClose: () => void;
-  onAddComment: (cardId: string, commentText: string) => void;
-  onDeleteComment: (idCommet: string) => void;
-  onAddDescription: (description: string, key: string) => void;
-  onEditComment: (comment: string, commentId: string) => void;
-  onEditCardText: (cardId: string, text: string) => void;
 }
 
 export const CardPopup: FC<CardPopupProps> = ({
   authorName,
-  comments,
-  card,
-  columnName,
+  cardId,
   onClose,
-  onAddComment,
-  onDeleteComment,
-  onEditComment,
-  onAddDescription,
-  onEditCardText,
 }) => {
+  const dispatch = useAppDispatch();
+  const card = useAppSelector(selectCardById(cardId));
+
+  const columnId = card?.columnId;
+  const columnName = useAppSelector(selectColumnNameById(columnId));
+
+  const cardText = card?.text;
+  const description = card?.description;
+
   const [isDescriptionEditable, setIsDescriptionEditable] = useState(false);
-  const [descriptionText, setDescriptionText] = useState(card.description);
-  const [editTextCard, setEditTextCard] = useState(card.text);
+  const [descriptionText, setDescriptionText] = useState(description);
+  const [editTextCard, setEditTextCard] = useState(cardText);
   const [isCardEditable, setIsCardEditable] = useState(false);
-  const trimmedText = descriptionText.trim();
-  const trimmedCardText = editTextCard.trim();
+  const trimmedDescription = descriptionText?.trim();
+  const trimmedCardText = editTextCard?.trim();
 
   const toggleDescriptionEditable = () => {
     if (!isDescriptionEditable) {
@@ -50,12 +48,13 @@ export const CardPopup: FC<CardPopupProps> = ({
 
   const handleCardEditable = () => {
     setIsCardEditable(true);
-    setEditTextCard(trimmedCardText);
   };
 
-  const handleEditCard = () => {
-    onEditCardText(card.id, trimmedCardText);
-    setEditTextCard(trimmedCardText);
+  const handleUpdateCard = () => {
+    if (trimmedCardText) {
+      setEditTextCard(trimmedCardText);
+      dispatch(updateCardText({ id: cardId, cardText: trimmedCardText }));
+    }
   };
 
   const handleChangeCardText: React.ChangeEventHandler<HTMLTextAreaElement> = (
@@ -66,7 +65,7 @@ export const CardPopup: FC<CardPopupProps> = ({
 
   const handleBlur: React.ChangeEventHandler<HTMLTextAreaElement> = () => {
     if (trimmedCardText) {
-      handleEditCard();
+      handleUpdateCard();
     }
     setIsCardEditable(false);
   };
@@ -75,15 +74,17 @@ export const CardPopup: FC<CardPopupProps> = ({
     event: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
     if (event.code === "Enter") {
-      handleEditCard();
+      handleUpdateCard();
       setIsCardEditable(false);
     }
   };
 
   const handleAddDiscription = () => {
-    if (trimmedText) {
-      setDescriptionText(trimmedText);
-      onAddDescription(trimmedText, card.id);
+    if (trimmedDescription) {
+      setDescriptionText(trimmedDescription);
+      dispatch(
+        updateDescription({ id: cardId, description: trimmedDescription })
+      );
     }
   };
 
@@ -113,7 +114,7 @@ export const CardPopup: FC<CardPopupProps> = ({
               onChange={handleChangeCardText}
             />
           ) : (
-            <CardTitle onClick={handleCardEditable}>{editTextCard}</CardTitle>
+            <CardTitle onClick={handleCardEditable}>{cardText}</CardTitle>
           )}
 
           <ColumnName>in list: {columnName}</ColumnName>
@@ -143,20 +144,13 @@ export const CardPopup: FC<CardPopupProps> = ({
         ) : (
           <DescriptionFakeText onClick={toggleDescriptionEditable}>
             {descriptionText
-              ? descriptionText
+              ? description
               : "Add a more detailed description..."}
           </DescriptionFakeText>
         )}
       </Description>
 
-      <Comments
-        cardId={card.id}
-        onAddComment={onAddComment}
-        onDeleteComment={onDeleteComment}
-        onEditComment={onEditComment}
-        authorName={authorName}
-        commentsData={comments}
-      />
+      <Comments cardId={cardId} authorName={authorName} />
     </StyledModal>
   );
 };

@@ -1,9 +1,8 @@
 import React, { FC, useState } from "react";
 
 import { COLORS } from "constant/colors";
-import { addUserName } from "store/ducks/user/userSlice";
-import { useAppSelector, useAppDispatch } from "store/store";
-import { RootState } from "store/store";
+import { addUserName } from "store/ducks/user";
+import { useAppSelector, useAppDispatch, RootState } from "store/store";
 import styled from "styled-components";
 
 import { Input, Button, Modal } from "../UI";

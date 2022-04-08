@@ -3,32 +3,31 @@ import React, { FC, useState } from "react";
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
 import TextareaAutosize from "react-textarea-autosize";
+import { deleteComment, updateComment } from "store/ducks/comments";
+import { useAppDispatch } from "store/store";
 import styled from "styled-components";
 
 interface CommentItemProps {
   authorName: string;
   commentId: string;
   commentText: string;
-  onDeleteComment: (idCommet: string) => void;
-  onEditComment: (comment: string, commentId: string) => void;
 }
 
 export const CommentItem: FC<CommentItemProps> = ({
   authorName,
   commentId,
   commentText,
-  onDeleteComment,
-  onEditComment,
 }) => {
+  const dispatch = useAppDispatch();
   const [isCommentEdit, setIsCommentEdit] = useState(false);
   const [editCommentText, setEditCommentText] = useState(commentText);
   const trimmedComment = editCommentText.trim();
 
-  const handleEditComment = (comment: string, commentId: string) => {
+  const handleEditComment = () => {
     if (trimmedComment) {
-      onEditComment(comment, commentId);
+      setEditCommentText(trimmedComment);
+      dispatch(updateComment({ id: commentId, commentText: trimmedComment }));
       setIsCommentEdit(false);
-      setEditCommentText(comment);
     }
   };
 
@@ -38,8 +37,8 @@ export const CommentItem: FC<CommentItemProps> = ({
     setEditCommentText(e.target.value);
   };
 
-  const handleDeleteComment = (idComment: string) => {
-    onDeleteComment(idComment);
+  const handleDeleteComment = () => {
+    dispatch(deleteComment({ id: commentId }));
   };
 
   const handleVisibleCommentEdit = () => {
@@ -54,9 +53,7 @@ export const CommentItem: FC<CommentItemProps> = ({
           <TextComment>{commentText}</TextComment>
           <ButtonContainerComment>
             <ButtonEdit onClick={handleVisibleCommentEdit}>Edit</ButtonEdit>
-            <ButtonDelete onClick={() => handleDeleteComment(commentId)}>
-              Delete
-            </ButtonDelete>
+            <ButtonDelete onClick={handleDeleteComment}>Delete</ButtonDelete>
           </ButtonContainerComment>
         </>
       ) : (
@@ -66,10 +63,7 @@ export const CommentItem: FC<CommentItemProps> = ({
             value={editCommentText}
             onChange={handleChangeComment}
           ></EditCommentsText>
-          <SaveButton
-            text="Save"
-            onClick={() => handleEditComment(trimmedComment, commentId)}
-          />
+          <SaveButton text="Save" onClick={handleEditComment} />
         </>
       )}
     </Root>
