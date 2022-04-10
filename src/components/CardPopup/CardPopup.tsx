@@ -1,9 +1,10 @@
 import React, { FC, useState } from "react";
 
-import { Comments } from "components";
+import { Comments, Form } from "components";
 import { Modal, Button } from "components/UI";
 import { ButtonCross } from "components/UI";
 import { COLORS } from "constant";
+import { useForm, SubmitHandler } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { updateCardText, updateDescription } from "store/ducks/cards";
 import { selectCardById } from "store/ducks/cards";
@@ -15,6 +16,11 @@ interface CardPopupProps {
   userName: string;
   cardId: string;
   onClose: () => void;
+}
+
+interface ICardPopup {
+  cardText: string;
+  description: string;
 }
 
 export const CardPopup: FC<CardPopupProps> = ({
@@ -32,11 +38,7 @@ export const CardPopup: FC<CardPopupProps> = ({
   const description = card?.description;
 
   const [isDescriptionEditable, setIsDescriptionEditable] = useState(false);
-  const [descriptionText, setDescriptionText] = useState(description);
-  const [editTextCard, setEditTextCard] = useState(cardText);
   const [isCardEditable, setIsCardEditable] = useState(false);
-  const trimmedDescription = descriptionText?.trim();
-  const trimmedCardText = editTextCard?.trim();
 
   const toggleDescriptionEditable = () => {
     if (!isDescriptionEditable) {
@@ -50,54 +52,22 @@ export const CardPopup: FC<CardPopupProps> = ({
     setIsCardEditable(true);
   };
 
-  const handleUpdateCard = () => {
-    if (trimmedCardText) {
-      setEditTextCard(trimmedCardText);
-      dispatch(updateCardText({ id: cardId, cardText: trimmedCardText }));
-    }
-  };
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ICardPopup>();
 
-  const handleChangeCardText: React.ChangeEventHandler<HTMLTextAreaElement> = (
-    e
-  ) => {
-    setEditTextCard(e.target.value);
-  };
-
-  const handleBlur: React.ChangeEventHandler<HTMLTextAreaElement> = () => {
-    if (trimmedCardText) {
-      handleUpdateCard();
-    }
+  const handleSubmitCard: SubmitHandler<ICardPopup> = ({ cardText }) => {
+    dispatch(updateCardText({ id: cardId, cardText: cardText }));
     setIsCardEditable(false);
   };
 
-  const handeleKeyDownEnter = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>
-  ) => {
-    if (event.code === "Enter") {
-      handleUpdateCard();
-      setIsCardEditable(false);
-    }
-  };
-
-  const handleAddDiscription = () => {
-    if (trimmedDescription) {
-      setDescriptionText(trimmedDescription);
-      dispatch(
-        updateDescription({ id: cardId, description: trimmedDescription })
-      );
-    }
-  };
-
-  const handleChangeTextDescription: React.ChangeEventHandler<
-    HTMLTextAreaElement
-  > = (e) => {
-    setDescriptionText(e.target.value);
-  };
-
-  const handleBlurDescription: React.ChangeEventHandler<
-    HTMLTextAreaElement
-  > = () => {
-    handleAddDiscription();
+  const handleSubmitDescription: SubmitHandler<ICardPopup> = ({
+    description,
+  }) => {
+    dispatch(updateDescription({ id: cardId, description: description }));
     setIsDescriptionEditable(false);
   };
 
@@ -106,15 +76,24 @@ export const CardPopup: FC<CardPopupProps> = ({
       <PopupHeader>
         <Container>
           {isCardEditable ? (
-            <CardTitleInput
-              onKeyDown={handeleKeyDownEnter}
-              onBlur={handleBlur}
-              value={editTextCard}
-              autoFocus
-              onChange={handleChangeCardText}
-            />
+            <Form
+              onBlur={handleSubmit(handleSubmitCard)}
+              onSubmit={handleSubmit(handleSubmitCard)}
+            >
+              <CardTextInput
+                {...register("cardText", {
+                  required: "Field cannot be empty.",
+                  value: cardText,
+                })}
+                autoFocus
+              />
+              <Error>
+                {errors?.cardText && <p>{errors.cardText.message}</p>}
+              </Error>
+              <StyledButton text="Save" type="submit" />
+            </Form>
           ) : (
-            <CardTitle onClick={handleCardEditable}>{cardText}</CardTitle>
+            <CardText onClick={handleCardEditable}>{cardText}</CardText>
           )}
 
           <ColumnName>in list: {columnName}</ColumnName>
@@ -125,27 +104,23 @@ export const CardPopup: FC<CardPopupProps> = ({
         <DescriptionTitle>Description</DescriptionTitle>
         {isDescriptionEditable ? (
           <ContainerDescription>
-            <DescriptionText
-              value={descriptionText}
-              onBlur={handleBlurDescription}
-              onChange={handleChangeTextDescription}
-              autoFocus
-              placeholder="Add a more detailed description..."
-            ></DescriptionText>
-            <ButtonContainer>
-              <StyledButton
-                text="Save"
-                type="submit"
-                onClick={handleAddDiscription}
+            <Form onSubmit={handleSubmit(handleSubmitDescription)}>
+              <DescriptionText
+                {...register("description", {
+                  value: description,
+                })}
+                autoFocus
+                placeholder="Add a more detailed description..."
               />
-              <ButtonCross onClick={toggleDescriptionEditable} />
-            </ButtonContainer>
+              <ButtonContainer>
+                <StyledButton text="Save" type="submit" />
+                <ButtonCross onClick={() => reset({ description: "" })} />
+              </ButtonContainer>
+            </Form>
           </ContainerDescription>
         ) : (
           <DescriptionFakeText onClick={toggleDescriptionEditable}>
-            {descriptionText
-              ? description
-              : "Add a more detailed description..."}
+            {description ? description : "Add a more detailed description..."}
           </DescriptionFakeText>
         )}
       </Description>
@@ -169,6 +144,11 @@ const StyledModal = styled(Modal)`
   border: none;
 `;
 
+const Error = styled.div`
+  font-size: 14px;
+  color: ${COLORS.red};
+`;
+
 const Container = styled.div`
   width: 100%;
   flex: 1;
@@ -188,7 +168,7 @@ const AuthorName = styled.p`
   color: ${COLORS.black};
 `;
 
-const CardTitle = styled.h2`
+const CardText = styled.h2`
   word-break: break-all;
   cursor: pointer;
   padding: 5px;
@@ -202,7 +182,7 @@ const CardTitle = styled.h2`
   }
 `;
 
-const CardTitleInput = styled(TextareaAutosize)`
+const CardTextInput = styled(TextareaAutosize)`
   width: 95%;
   font-size: 18px;
   padding: 5px;
@@ -246,6 +226,7 @@ const DescriptionFakeText = styled.div`
 `;
 
 const DescriptionText = styled(TextareaAutosize)`
+  width: 100%;
   height: 100px;
   font-size: 16px;
   padding: 10px;

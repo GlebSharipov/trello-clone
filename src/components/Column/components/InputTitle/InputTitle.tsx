@@ -1,9 +1,12 @@
 import React, { FC, useState } from "react";
 
+import { Form } from "components";
 import { Input } from "components/UI";
 import { COLORS } from "constant/colors";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { updateColumnName } from "store/ducks/columns";
-import { useAppDispatch } from "store/store";
+import { selectColumnNameById } from "store/ducks/columns";
+import { useAppDispatch, useAppSelector } from "store/store";
 import styled from "styled-components";
 
 interface InputTitleProps {
@@ -11,53 +14,53 @@ interface InputTitleProps {
   columnId: string;
 }
 
-export const InputTitle: FC<InputTitleProps> = ({ columnName, columnId }) => {
-  const dispatch = useAppDispatch();
-  const [isColumnTitleEditable, setIsColumnTitleEditable] = useState(false);
-  const [changeСolumnName, setChangeColumnName] = useState(columnName);
-  const trimmedColumnName = changeСolumnName.trim();
+interface Title {
+  columnName: string;
+}
 
-  const handleChangeColumn: React.ChangeEventHandler<HTMLInputElement> = (e) =>
-    setChangeColumnName(e.target.value);
+export const InputTitle: FC<InputTitleProps> = ({ columnId }) => {
+  const dispatch = useAppDispatch();
+  const columnName = useAppSelector(selectColumnNameById(columnId));
+
+  const [isColumnTitleEditable, setIsColumnTitleEditable] = useState(false);
 
   const handleShowInputColumn = () => {
     setIsColumnTitleEditable(true);
   };
 
-  const handleBlur: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setChangeColumnName(e.target.value);
-    if (trimmedColumnName) {
-      setChangeColumnName(trimmedColumnName);
-      dispatch(
-        updateColumnName({ id: columnId, columnName: trimmedColumnName })
-      );
-      setIsColumnTitleEditable(false);
-    }
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Title>({
+    mode: "onBlur",
+  });
 
-  const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code === "Enter") {
-      if (trimmedColumnName) {
-        dispatch(
-          updateColumnName({ id: columnId, columnName: trimmedColumnName })
-        );
-        setIsColumnTitleEditable(false);
-      }
-    }
+  const onSubmit: SubmitHandler<Title> = ({ columnName }) => {
+    dispatch(updateColumnName({ id: columnId, columnName: columnName }));
+    setIsColumnTitleEditable(false);
   };
 
   return (
     <Root>
       {isColumnTitleEditable ? (
-        <StyledInput
-          onKeyDown={keyDownHandler}
-          onBlur={handleBlur}
-          onChange={handleChangeColumn}
-          value={changeСolumnName}
-          type="text"
-        />
+        <Form onBlur={handleSubmit(onSubmit)} onSubmit={handleSubmit(onSubmit)}>
+          <StyledInput
+            {...register("columnName", {
+              required: "Field cannot be empty.",
+              value: columnName,
+              validate: {
+                value: (value) => value.trim().length > 0,
+              },
+            })}
+            type="text"
+          />
+          <Error>
+            {errors?.columnName && <p>{errors.columnName.message}</p>}
+          </Error>
+        </Form>
       ) : (
-        <Title onClick={handleShowInputColumn}>{columnName}</Title>
+        <ColumnName onClick={handleShowInputColumn}>{columnName}</ColumnName>
       )}
     </Root>
   );
@@ -69,7 +72,7 @@ const Root = styled.div`
   padding: 8px;
 `;
 
-const Title = styled.h2`
+const ColumnName = styled.h2`
   cursor: pointer;
   max-width: 280px;
   word-break: break-all;
@@ -81,4 +84,9 @@ const StyledInput = styled(Input)`
   border: 2px solid ${COLORS.dark_blue};
   border-radius: 3px;
   margin-bottom: 6px;
+`;
+
+const Error = styled.div`
+  font-size: 14px;
+  color: ${COLORS.red};
 `;

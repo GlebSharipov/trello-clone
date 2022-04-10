@@ -1,8 +1,9 @@
 import React, { FC, useState, useMemo } from "react";
 
-import { Card } from "components";
+import { Card, Form } from "components";
 import { Button, ButtonCross } from "components/UI";
 import { COLORS } from "constant/colors";
+import { useForm, SubmitHandler } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { addNewCard } from "store/ducks/cards";
 import { useAppSelector, useAppDispatch, RootState } from "store/store";
@@ -16,54 +17,40 @@ interface ColumnProps {
   onCardClick: (id: string) => void;
 }
 
+interface CardText {
+  cardText: string;
+}
+
 export const Column: FC<ColumnProps> = ({ columnName, id, onCardClick }) => {
   const cards = useAppSelector((state: RootState) => state.cards);
   const dispatch = useAppDispatch();
 
   const [isCardTitleEditable, setIsCardTitleEditable] = useState(false);
-  const [cardText, setCardText] = useState("");
-  const trimmedText = cardText.trim();
 
   const filteredCards = useMemo(
     () => cards.filter((card) => card.columnId === id),
     [cards, id]
   );
 
-  const handleChangeText: React.ChangeEventHandler<HTMLTextAreaElement> = (
-    e
-  ) => {
-    setCardText(e.target.value);
-  };
+  const { register, handleSubmit, reset } = useForm<CardText>({
+    mode: "onBlur",
+  });
 
-  const toggleIsInputVisible = () => {
-    if (!isCardTitleEditable) {
-      setIsCardTitleEditable(true);
-    } else {
+  const onSubmit: SubmitHandler<CardText> = ({ cardText }) => {
+    if (cardText.trim()) {
+      dispatch(addNewCard({ columnId: id, cardText: cardText }));
       setIsCardTitleEditable(false);
-    }
-  };
-
-  const handleAddCard = () => {
-    if (trimmedText) {
-      setCardText(trimmedText);
-      dispatch(addNewCard({ columnId: id, cardText: trimmedText }));
-      setCardText("");
-      setIsCardTitleEditable(false);
-    }
-  };
-
-  const handleBlur: React.ChangeEventHandler<HTMLTextAreaElement> = () => {
-    if (trimmedText) {
-      handleAddCard();
+      reset();
     }
     setIsCardTitleEditable(false);
   };
 
-  const handeleKeyDownEnter = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>
-  ) => {
-    if (event.code === "Enter") {
-      handleAddCard();
+  const toggleIsInputVisible = () => {
+    if (isCardTitleEditable) {
+      setIsCardTitleEditable(false);
+      reset({ cardText: "" });
+    } else {
+      setIsCardTitleEditable(true);
     }
   };
 
@@ -83,21 +70,21 @@ export const Column: FC<ColumnProps> = ({ columnName, id, onCardClick }) => {
 
       {isCardTitleEditable ? (
         <Container>
-          <InputAddCard
-            onKeyDown={handeleKeyDownEnter}
-            autoFocus
-            onBlur={handleBlur}
-            value={cardText}
-            onChange={handleChangeText}
-          />
-          <ButtonContainer>
-            <StyledButton
-              type="submit"
-              text="Add card"
-              onClick={handleAddCard}
+          <Form
+            onBlur={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <InputAddCard
+              {...register("cardText", {
+                value: "",
+              })}
+              autoFocus
             />
-            <ButtonCross onClick={toggleIsInputVisible} />
-          </ButtonContainer>
+            <ButtonContainer>
+              <StyledButton type="submit" text="Add card" />
+              <ButtonCross onClick={toggleIsInputVisible} />
+            </ButtonContainer>
+          </Form>
         </Container>
       ) : (
         <AddCardButton onClick={toggleIsInputVisible}>

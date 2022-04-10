@@ -1,7 +1,9 @@
 import React, { FC, useState, useMemo } from "react";
 
+import { Form } from "components";
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
+import { useForm, SubmitHandler } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { addComment } from "store/ducks/comments";
 import { useAppSelector, useAppDispatch, RootState } from "store/store";
@@ -14,44 +16,36 @@ interface CommentsProps {
   cardId: string;
 }
 
+interface Comment {
+  commentText: string;
+}
+
 export const Comments: FC<CommentsProps> = ({ cardId, userName }) => {
   const comments = useAppSelector((state: RootState) => state.comments);
   const dispatch = useAppDispatch();
 
   const [isCommentsEditable, setIsCommentsEditable] = useState(false);
-  const [commentText, setCommentText] = useState("");
-  const trimmedTextComment = commentText.trim();
 
   const filteredComment = useMemo(
     () => comments.filter((comment) => comment.cardId === cardId),
     [comments, cardId]
   );
 
-  const handleAddComment = () => {
-    if (trimmedTextComment) {
-      setCommentText(trimmedTextComment);
-      dispatch(addComment({ cardId: cardId, commentText: trimmedTextComment }));
-      setCommentText("");
-      setIsCommentsEditable(false);
-    }
-  };
-
   const handleCommentsEditable = () => {
     setIsCommentsEditable(true);
   };
 
-  const handleKeyDownHandler = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>
-  ) => {
-    if (event.code === "Enter") {
-      handleAddComment();
-    }
-  };
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Comment>();
 
-  const handleChangeTextComment: React.ChangeEventHandler<
-    HTMLTextAreaElement
-  > = (e) => {
-    setCommentText(e.target.value);
+  const onSubmit: SubmitHandler<Comment> = ({ commentText }) => {
+    dispatch(addComment({ cardId: cardId, commentText: commentText }));
+    setIsCommentsEditable(false);
+    reset();
   };
 
   return (
@@ -59,20 +53,25 @@ export const Comments: FC<CommentsProps> = ({ cardId, userName }) => {
       <CommentsTitle>Comments</CommentsTitle>
       {isCommentsEditable ? (
         <AddComment>
-          <AddCommentsText
-            value={trimmedTextComment}
-            onKeyDown={handleKeyDownHandler}
-            autoFocus
-            onChange={handleChangeTextComment}
-            placeholder="Write a comment..."
-          ></AddCommentsText>
-          <ButtonContainer>
-            <StyledButton
-              text="Save"
-              type="submit"
-              onClick={handleAddComment}
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <AddCommentsText
+              {...register("commentText", {
+                required: "Field cannot be empty.",
+                value: "",
+                validate: {
+                  value: (value) => value.trim().length > 0,
+                },
+              })}
+              autoFocus
+              placeholder="Write a comment..."
             />
-          </ButtonContainer>
+            <Error>
+              {errors?.commentText && <p>{errors.commentText.message}</p>}
+            </Error>
+            <ButtonContainer>
+              <StyledButton text="Save" type="submit" />
+            </ButtonContainer>
+          </Form>
         </AddComment>
       ) : (
         <CommentsFakeText onClick={handleCommentsEditable}>
@@ -152,4 +151,9 @@ const StyledButton = styled(Button)`
   &:hover {
     background-color: ${COLORS.dark_blue};
   }
+`;
+
+const Error = styled.div`
+  font-size: 14px;
+  color: ${COLORS.red};
 `;

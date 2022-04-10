@@ -7,7 +7,7 @@ interface ButtonProps {
   className?: string;
   type?: "button" | "submit" | "reset" | undefined;
   text: string;
-  onClick: React.MouseEventHandler;
+  onClick?: () => void;
 }
 
 export const Button: FC<ButtonProps> = ({

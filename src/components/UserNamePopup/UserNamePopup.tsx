@@ -1,60 +1,78 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import { COLORS } from "constant/colors";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { addUserName } from "store/ducks/user";
-import { useAppSelector, useAppDispatch, RootState } from "store/store";
+import { useAppDispatch } from "store/store";
 import styled from "styled-components";
 
-import { Input, Button, Modal } from "../UI";
+import { Button, Input, Modal } from "../UI";
+
+interface User {
+  name: string;
+}
 
 export const UserNamePopup: FC = () => {
-  const userName = useAppSelector((state: RootState) => state.user.userName);
   const dispatch = useAppDispatch();
-  const [name, setName] = useState(userName);
-  const trimmedName = name.trim();
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setName(e.currentTarget.value);
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<User>();
 
-  const handleAddName = () => {
-    if (trimmedName) {
-      dispatch(addUserName(trimmedName));
-    }
+  const onSubmit: SubmitHandler<User> = ({ name }) => {
+    dispatch(addUserName(name));
   };
 
   return (
-    <Root>
-      <StyledInput
-        maxLength={20}
-        required
-        value={name}
-        onChange={handleChange}
-        type="text"
-        placeholder="Enter your name"
-      />
-      <StyledButton onClick={handleAddName} text="Send" type="submit" />
-    </Root>
+    <Modal>
+      <Root onSubmit={handleSubmit(onSubmit)}>
+        <StyledInput
+          {...register("name", {
+            required: "The field is required ",
+            maxLength: {
+              value: 15,
+              message: "Maximum 15 characters",
+            },
+            validate: {
+              value: (value) => value.trim().length > 0,
+            },
+          })}
+          placeholder="Enter your name"
+          type="text"
+        />
+        <Error>{errors?.name && <p>{errors.name.message}</p>}</Error>
+        <StyledButton text="Send" type="submit" />
+      </Root>
+    </Modal>
   );
 };
 
-const Root = styled(Modal)`
+const Root = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   max-width: 350px;
   min-height: 25vh;
-  overflow: auto;
   border: 1px solid ${COLORS.black};
   background-color: ${COLORS.white};
   border-radius: 10px;
-  padding: 40px;
+  padding: 50px 40px;
+`;
+
+const Error = styled.div`
+  margin-top: 5px;
+  font-size: 14px;
+  color: ${COLORS.red};
 `;
 
 const StyledButton = styled(Button)`
   background-color: ${COLORS.gray};
   border-radius: 5px;
+  margin-top: auto;
+  margin-bottom: 10px;
   &:hover {
     background-color: ${COLORS.dark_orange};
   }
@@ -65,6 +83,12 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledInput = styled(Input)`
-  max-lines: 20;
   font-size: 25px;
+  margin-top: 20px;
+  border: 1px solid ${COLORS.black};
+  background-color: ${COLORS.white};
+  &:focus {
+    outline: none;
+    box-shadow: 0px 0px 4px ${COLORS.blue};
+  }
 `;

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 
 import { COLORS } from "constant/colors";
 import styled from "styled-components";
@@ -6,8 +6,7 @@ import styled from "styled-components";
 interface InputProps {
   type?: string;
   placeholder?: string;
-  value: string;
-  maxLength?: number;
+  value?: string;
   className?: string;
   required?: boolean;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
@@ -15,31 +14,37 @@ interface InputProps {
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 }
 
-export const Input: FC<InputProps> = ({
-  type,
-  placeholder,
-  value,
-  required,
-  className,
-  onChange,
-  onBlur,
-  onKeyDown,
-  ...props
-}) => {
-  return (
-    <StyledInput
-      type={type}
-      value={value}
-      autoFocus
-      className={className}
-      onChange={onChange}
-      onBlur={onBlur}
-      onKeyDown={onKeyDown}
-      placeholder={placeholder}
-      {...props}
-    />
-  );
-};
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      type,
+      placeholder,
+      value,
+      required,
+      className,
+      onChange,
+      onBlur,
+      onKeyDown,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <StyledInput
+        ref={ref}
+        type={type}
+        value={value}
+        autoFocus
+        className={className}
+        onChange={onChange}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+        placeholder={placeholder}
+        {...props}
+      />
+    );
+  }
+);
 
 const StyledInput = styled.input`
   font-size: 18px;

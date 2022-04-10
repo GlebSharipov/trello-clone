@@ -1,7 +1,9 @@
 import React, { FC, useState } from "react";
 
+import { Form } from "components";
 import { Button } from "components/UI";
 import { COLORS } from "constant/colors";
+import { useForm, SubmitHandler } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { deleteComment, updateComment } from "store/ducks/comments";
 import { useAppDispatch } from "store/store";
@@ -13,6 +15,10 @@ interface CommentItemProps {
   commentText: string;
 }
 
+interface CommentEdit {
+  text: string;
+}
+
 export const CommentItem: FC<CommentItemProps> = ({
   userName,
   commentId,
@@ -20,22 +26,6 @@ export const CommentItem: FC<CommentItemProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const [isCommentEdit, setIsCommentEdit] = useState(false);
-  const [editCommentText, setEditCommentText] = useState(commentText);
-  const trimmedComment = editCommentText.trim();
-
-  const handleEditComment = () => {
-    if (trimmedComment) {
-      setEditCommentText(trimmedComment);
-      dispatch(updateComment({ id: commentId, commentText: trimmedComment }));
-      setIsCommentEdit(false);
-    }
-  };
-
-  const handleChangeComment: React.ChangeEventHandler<HTMLTextAreaElement> = (
-    e
-  ) => {
-    setEditCommentText(e.target.value);
-  };
 
   const handleDeleteComment = () => {
     dispatch(deleteComment({ id: commentId }));
@@ -43,6 +33,19 @@ export const CommentItem: FC<CommentItemProps> = ({
 
   const handleVisibleCommentEdit = () => {
     setIsCommentEdit(true);
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CommentEdit>({
+    mode: "onBlur",
+  });
+
+  const onSubmit: SubmitHandler<CommentEdit> = ({ text }) => {
+    dispatch(updateComment({ id: commentId, commentText: text }));
+    setIsCommentEdit(false);
   };
 
   return (
@@ -57,14 +60,20 @@ export const CommentItem: FC<CommentItemProps> = ({
           </ButtonContainerComment>
         </>
       ) : (
-        <>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <EditCommentsText
+            {...register("text", {
+              required: "Field cannot be empty.",
+              value: commentText,
+              validate: {
+                value: (value) => value.trim().length > 0,
+              },
+            })}
             autoFocus
-            value={editCommentText}
-            onChange={handleChangeComment}
-          ></EditCommentsText>
-          <SaveButton text="Save" onClick={handleEditComment} />
-        </>
+          />
+          <Error>{errors?.text && <p>{errors.text.message}</p>}</Error>
+          <SaveButton text="Save" type="submit" />
+        </Form>
       )}
     </Root>
   );
@@ -137,4 +146,9 @@ const ButtonDelete = styled.button`
   &:hover {
     color: ${COLORS.red};
   }
+`;
+
+const Error = styled.div`
+  font-size: 14px;
+  color: ${COLORS.red};
 `;
