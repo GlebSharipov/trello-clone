@@ -1,10 +1,7 @@
 import React, { FC, useState, useMemo } from "react";
 
-import { Form } from "components";
-import { Button } from "components/UI";
+import { TextForm } from "components";
 import { COLORS } from "constant/colors";
-import { useForm, SubmitHandler } from "react-hook-form";
-import TextareaAutosize from "react-textarea-autosize";
 import { addComment } from "store/ducks/comments";
 import { useAppSelector, useAppDispatch, RootState } from "store/store";
 import styled from "styled-components";
@@ -14,10 +11,6 @@ import { CommentItem } from "./components";
 interface CommentsProps {
   userName: string;
   cardId: string;
-}
-
-interface Comment {
-  commentText: string;
 }
 
 export const Comments: FC<CommentsProps> = ({ cardId, userName }) => {
@@ -35,17 +28,12 @@ export const Comments: FC<CommentsProps> = ({ cardId, userName }) => {
     setIsCommentsEditable(true);
   };
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<Comment>();
-
-  const onSubmit: SubmitHandler<Comment> = ({ commentText }) => {
-    dispatch(addComment({ cardId: cardId, commentText: commentText }));
+  const onSubmitComment = (value: string) => {
+    if (value.trim()) {
+      dispatch(addComment({ cardId: cardId, commentText: value }));
+      setIsCommentsEditable(false);
+    }
     setIsCommentsEditable(false);
-    reset();
   };
 
   return (
@@ -53,25 +41,12 @@ export const Comments: FC<CommentsProps> = ({ cardId, userName }) => {
       <CommentsTitle>Comments</CommentsTitle>
       {isCommentsEditable ? (
         <AddComment>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <AddCommentsText
-              {...register("commentText", {
-                required: "Field cannot be empty.",
-                value: "",
-                validate: {
-                  value: (value) => value.trim().length > 0,
-                },
-              })}
-              autoFocus
-              placeholder="Write a comment..."
-            />
-            <Error>
-              {errors?.commentText && <p>{errors.commentText.message}</p>}
-            </Error>
-            <ButtonContainer>
-              <StyledButton text="Save" type="submit" />
-            </ButtonContainer>
-          </Form>
+          <TextForm
+            onSubmit={onSubmitComment}
+            isOnBlur
+            name="addComment"
+            defaultValues=""
+          />
         </AddComment>
       ) : (
         <CommentsFakeText onClick={handleCommentsEditable}>
@@ -114,19 +89,6 @@ const CommentsFakeText = styled.div`
   }
 `;
 
-const AddCommentsText = styled(TextareaAutosize)`
-  width: 100%;
-  padding-bottom: 100px;
-  font-size: 16px;
-  padding: 10px;
-  border-radius: 4px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  resize: none;
-  border: 2px solid ${COLORS.blue};
-  background-color: ${COLORS.white};
-`;
-
 const AddComment = styled.div`
   width: 100%;
 `;
@@ -134,26 +96,4 @@ const AddComment = styled.div`
 const CommentsContainer = styled.ul`
   max-height: 300px;
   overflow-x: auto;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 150px;
-  margin-top: 5px;
-`;
-
-const StyledButton = styled(Button)`
-  margin-top: 0;
-  margin-right: 10px;
-  color: ${COLORS.white};
-  background-color: ${COLORS.blue};
-  &:hover {
-    background-color: ${COLORS.dark_blue};
-  }
-`;
-
-const Error = styled.div`
-  font-size: 14px;
-  color: ${COLORS.red};
 `;

@@ -5,4 +5,4 @@ export { Column } from "./Column";
 export { Header } from "./Header";
 export { CardPopup } from "./CardPopup";
 export { Comments } from "./Comments";
-export { Form } from "./Form";
+export { TextForm, NameForm } from "./Forms";

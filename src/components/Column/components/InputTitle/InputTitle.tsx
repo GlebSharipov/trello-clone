@@ -1,9 +1,6 @@
 import React, { FC, useState } from "react";
 
-import { Form } from "components";
-import { Input } from "components/UI";
-import { COLORS } from "constant/colors";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { NameForm } from "components";
 import { updateColumnName } from "store/ducks/columns";
 import { selectColumnNameById } from "store/ducks/columns";
 import { useAppDispatch, useAppSelector } from "store/store";
@@ -12,10 +9,6 @@ import styled from "styled-components";
 interface InputTitleProps {
   columnName: string;
   columnId: string;
-}
-
-interface Title {
-  columnName: string;
 }
 
 export const InputTitle: FC<InputTitleProps> = ({ columnId }) => {
@@ -28,37 +21,20 @@ export const InputTitle: FC<InputTitleProps> = ({ columnId }) => {
     setIsColumnTitleEditable(true);
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Title>({
-    mode: "onBlur",
-  });
-
-  const onSubmit: SubmitHandler<Title> = ({ columnName }) => {
-    dispatch(updateColumnName({ id: columnId, columnName: columnName }));
+  const handleSubmitEditColumn = (value: string) => {
+    dispatch(updateColumnName({ id: columnId, columnName: value }));
     setIsColumnTitleEditable(false);
   };
 
   return (
     <Root>
       {isColumnTitleEditable ? (
-        <Form onBlur={handleSubmit(onSubmit)} onSubmit={handleSubmit(onSubmit)}>
-          <StyledInput
-            {...register("columnName", {
-              required: "Field cannot be empty.",
-              value: columnName,
-              validate: {
-                value: (value) => value.trim().length > 0,
-              },
-            })}
-            type="text"
-          />
-          <Error>
-            {errors?.columnName && <p>{errors.columnName.message}</p>}
-          </Error>
-        </Form>
+        <NameForm
+          name="columnName"
+          isOnBlur
+          defaultValues={columnName}
+          onSubmit={handleSubmitEditColumn}
+        />
       ) : (
         <ColumnName onClick={handleShowInputColumn}>{columnName}</ColumnName>
       )}
@@ -78,15 +54,4 @@ const ColumnName = styled.h2`
   word-break: break-all;
   font-size: 18px;
   margin-bottom: 12px;
-`;
-
-const StyledInput = styled(Input)`
-  border: 2px solid ${COLORS.dark_blue};
-  border-radius: 3px;
-  margin-bottom: 6px;
-`;
-
-const Error = styled.div`
-  font-size: 14px;
-  color: ${COLORS.red};
 `;

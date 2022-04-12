@@ -1,10 +1,7 @@
 import React, { FC, useState } from "react";
 
-import { Form } from "components";
-import { Button } from "components/UI";
+import { TextForm } from "components";
 import { COLORS } from "constant/colors";
-import { useForm, SubmitHandler } from "react-hook-form";
-import TextareaAutosize from "react-textarea-autosize";
 import { deleteComment, updateComment } from "store/ducks/comments";
 import { useAppDispatch } from "store/store";
 import styled from "styled-components";
@@ -13,10 +10,6 @@ interface CommentItemProps {
   userName: string;
   commentId: string;
   commentText: string;
-}
-
-interface CommentEdit {
-  text: string;
 }
 
 export const CommentItem: FC<CommentItemProps> = ({
@@ -35,16 +28,8 @@ export const CommentItem: FC<CommentItemProps> = ({
     setIsCommentEdit(true);
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CommentEdit>({
-    mode: "onBlur",
-  });
-
-  const onSubmit: SubmitHandler<CommentEdit> = ({ text }) => {
-    dispatch(updateComment({ id: commentId, commentText: text }));
+  const handleSubmitEditComment = (value: string) => {
+    dispatch(updateComment({ id: commentId, commentText: value }));
     setIsCommentEdit(false);
   };
 
@@ -60,20 +45,12 @@ export const CommentItem: FC<CommentItemProps> = ({
           </ButtonContainerComment>
         </>
       ) : (
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <EditCommentsText
-            {...register("text", {
-              required: "Field cannot be empty.",
-              value: commentText,
-              validate: {
-                value: (value) => value.trim().length > 0,
-              },
-            })}
-            autoFocus
-          />
-          <Error>{errors?.text && <p>{errors.text.message}</p>}</Error>
-          <SaveButton text="Save" type="submit" />
-        </Form>
+        <TextForm
+          onSubmit={handleSubmitEditComment}
+          isValidate
+          name="commentEditable"
+          defaultValues={commentText}
+        />
       )}
     </Root>
   );
@@ -93,28 +70,6 @@ const TextComment = styled.div`
   box-shadow: 0 1px 0 ${COLORS.dark_gray};
   background-color: ${COLORS.gray};
   border: 1px solid ${COLORS.green};
-`;
-
-const EditCommentsText = styled(TextareaAutosize)`
-  width: 100%;
-  padding-bottom: 100px;
-  font-size: 16px;
-  padding: 10px;
-  border-radius: 4px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  resize: none;
-  border: 2px solid ${COLORS.blue};
-  background-color: ${COLORS.white};
-`;
-
-const SaveButton = styled(Button)`
-  margin-top: 0;
-  border-radius: 4px;
-  color: ${COLORS.white};
-  &:hover {
-    background-color: ${COLORS.green};
-  }
 `;
 
 const AuthorName = styled.p`
@@ -146,9 +101,4 @@ const ButtonDelete = styled.button`
   &:hover {
     color: ${COLORS.red};
   }
-`;
-
-const Error = styled.div`
-  font-size: 14px;
-  color: ${COLORS.red};
 `;

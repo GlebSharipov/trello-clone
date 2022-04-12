@@ -55,7 +55,7 @@ const ButtonContainer = styled.div`
 const ModalWrapper = styled.div`
   position: absolute;
   max-width: 750px;
-  max-height: 80vh;
+  max-height: 88vh;
   padding: 10px 20px;
   margin: 48px 0 80px;
   border-radius: 4px;

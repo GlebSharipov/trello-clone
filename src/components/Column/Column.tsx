@@ -1,10 +1,7 @@
 import React, { FC, useState, useMemo } from "react";
 
-import { Card, Form } from "components";
-import { Button, ButtonCross } from "components/UI";
+import { Card, TextForm } from "components";
 import { COLORS } from "constant/colors";
-import { useForm, SubmitHandler } from "react-hook-form";
-import TextareaAutosize from "react-textarea-autosize";
 import { addNewCard } from "store/ducks/cards";
 import { useAppSelector, useAppDispatch, RootState } from "store/store";
 import styled from "styled-components";
@@ -17,41 +14,27 @@ interface ColumnProps {
   onCardClick: (id: string) => void;
 }
 
-interface CardText {
-  cardText: string;
-}
-
 export const Column: FC<ColumnProps> = ({ columnName, id, onCardClick }) => {
   const cards = useAppSelector((state: RootState) => state.cards);
   const dispatch = useAppDispatch();
 
-  const [isCardTitleEditable, setIsCardTitleEditable] = useState(false);
+  const [isCardTextEditable, setIsCardTextEditable] = useState(false);
 
   const filteredCards = useMemo(
     () => cards.filter((card) => card.columnId === id),
     [cards, id]
   );
 
-  const { register, handleSubmit, reset } = useForm<CardText>({
-    mode: "onBlur",
-  });
-
-  const onSubmit: SubmitHandler<CardText> = ({ cardText }) => {
-    if (cardText.trim()) {
-      dispatch(addNewCard({ columnId: id, cardText: cardText }));
-      setIsCardTitleEditable(false);
-      reset();
+  const handleSubmitNewCard = (value: string) => {
+    if (value.trim()) {
+      dispatch(addNewCard({ columnId: id, cardText: value }));
+      setIsCardTextEditable(false);
     }
-    setIsCardTitleEditable(false);
+    setIsCardTextEditable(false);
   };
 
   const toggleIsInputVisible = () => {
-    if (isCardTitleEditable) {
-      setIsCardTitleEditable(false);
-      reset({ cardText: "" });
-    } else {
-      setIsCardTitleEditable(true);
-    }
+    setIsCardTextEditable(true);
   };
 
   return (
@@ -68,23 +51,14 @@ export const Column: FC<ColumnProps> = ({ columnName, id, onCardClick }) => {
         ))}
       </CardContainer>
 
-      {isCardTitleEditable ? (
+      {isCardTextEditable ? (
         <Container>
-          <Form
-            onBlur={handleSubmit(onSubmit)}
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <InputAddCard
-              {...register("cardText", {
-                value: "",
-              })}
-              autoFocus
-            />
-            <ButtonContainer>
-              <StyledButton type="submit" text="Add card" />
-              <ButtonCross onClick={toggleIsInputVisible} />
-            </ButtonContainer>
-          </Form>
+          <TextForm
+            onSubmit={handleSubmitNewCard}
+            isOnBlur
+            name="addNewCard"
+            defaultValues=""
+          />
         </Container>
       ) : (
         <AddCardButton onClick={toggleIsInputVisible}>
@@ -126,32 +100,5 @@ const AddCardButton = styled.button`
   &:hover {
     background-color: ${COLORS.lighte_gray};
     color: ${COLORS.black};
-  }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 10px 0;
-`;
-
-const InputAddCard = styled(TextareaAutosize)`
-  font-size: 16px;
-  width: 100%;
-  padding-bottom: 30px;
-  background-color: ${COLORS.white};
-  overflow: hidden;
-  overflow-wrap: break-word;
-  resize: none;
-  box-shadow: 0 1px 0 ${COLORS.dark_gray};
-`;
-
-const StyledButton = styled(Button)`
-  color: ${COLORS.white};
-  background-color: ${COLORS.blue};
-  margin: 0;
-  margin-right: 10px;
-  &:hover {
-    background-color: ${COLORS.dark_blue};
   }
 `;
