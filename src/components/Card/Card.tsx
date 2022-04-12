@@ -23,7 +23,7 @@ export const Card: FC<CardProps> = ({ text, id, onCardClick }) => {
   };
 
   const countComment = useMemo(
-    () => comments.filter((comment) => comment.cardId === id),
+    () => Object.values(comments).filter((comment) => comment.cardId === id),
     [comments, id]
   );
 

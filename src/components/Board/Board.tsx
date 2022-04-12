@@ -31,7 +31,7 @@ export const Board: FC<BoardProps> = ({ userName }) => {
 
   return (
     <Root>
-      {columns.map((column) => (
+      {Object.values(columns).map((column) => (
         <Column
           key={column.id}
           columnName={column.columnName}

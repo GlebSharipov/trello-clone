@@ -1,6 +1,5 @@
 import { RootState } from "store/store";
 
-export const selectColumnNameById = (columnId: string | undefined) => {
-  return (state: RootState) =>
-    state.columns.find((column) => column.id === columnId)?.columnName;
+export const selectColumnNameById = (columnId: string) => {
+  return (state: RootState) => state.columns[columnId].columnName;
 };
