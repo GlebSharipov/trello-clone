@@ -31,14 +31,16 @@ export const Board: FC<BoardProps> = ({ userName }) => {
 
   return (
     <Root>
-      {Object.values(columns).map((column) => (
-        <Column
-          key={column.id}
-          columnName={column.columnName}
-          id={column.id}
-          onCardClick={handleCardClick}
-        />
-      ))}
+      <Container>
+        {Object.values(columns).map((column) => (
+          <Column
+            key={column.id}
+            columnName={column.columnName}
+            id={column.id}
+            onCardClick={handleCardClick}
+          />
+        ))}
+      </Container>
 
       {currentCardId && (
         <CardPopup
@@ -51,9 +53,13 @@ export const Board: FC<BoardProps> = ({ userName }) => {
   );
 };
 
-const Root = styled.ul`
-  display: flex;
+const Root = styled.main`
   margin-top: 80px;
-  align-items: flex-start;
   padding: 0 30px;
+`;
+
+const Container = styled.ul`
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
 `;
