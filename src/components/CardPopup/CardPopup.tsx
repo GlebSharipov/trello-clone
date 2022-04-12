@@ -3,8 +3,11 @@ import React, { FC, useState } from "react";
 import { Comments, TextForm } from "components";
 import { Modal } from "components/UI";
 import { COLORS } from "constant";
-import { updateCardText, updateDescription } from "store/ducks/cards";
-import { selectCardById } from "store/ducks/cards";
+import {
+  updateCardText,
+  updateDescription,
+  selectCardById,
+} from "store/ducks/cards";
 import { selectColumnNameById } from "store/ducks/columns";
 import { useAppSelector, useAppDispatch } from "store/store";
 import styled from "styled-components";
@@ -23,10 +26,10 @@ export const CardPopup: FC<CardPopupProps> = ({
   const dispatch = useAppDispatch();
   const card = useAppSelector(selectCardById(cardId));
 
-  const columnId = card?.columnId;
+  const columnId = card.columnId;
   const columnName = useAppSelector(selectColumnNameById(columnId));
 
-  const cardText = card?.text;
+  const cardText = card.text;
   const description = card?.description;
 
   const [isDescriptionEditable, setIsDescriptionEditable] = useState(false);

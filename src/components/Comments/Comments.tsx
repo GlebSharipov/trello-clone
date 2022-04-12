@@ -20,7 +20,8 @@ export const Comments: FC<CommentsProps> = ({ cardId, userName }) => {
   const [isCommentsEditable, setIsCommentsEditable] = useState(false);
 
   const filteredComment = useMemo(
-    () => comments.filter((comment) => comment.cardId === cardId),
+    () =>
+      Object.values(comments).filter((comment) => comment.cardId === cardId),
     [comments, cardId]
   );
 

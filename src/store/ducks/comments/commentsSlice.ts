@@ -1,37 +1,35 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CommentType } from "types";
+import { commentsDefaultData } from "utils/mock";
 import { v4 as uuidv4 } from "uuid";
 
 export const commentsSlice = createSlice({
   name: "comments",
-  initialState: [] as CommentType[],
+  initialState: commentsDefaultData,
   reducers: {
     addComment: (
       state,
       action: PayloadAction<{ cardId: string; commentText: string }>
     ) => {
-      state.push({
-        id: uuidv4(),
-        cardId: action.payload.cardId,
-        commentText: action.payload.commentText,
-      });
+      const { cardId, commentText } = action.payload;
+      const id = uuidv4();
+      state[id] = {
+        id: id,
+        cardId: cardId,
+        commentText: commentText,
+      };
     },
 
     updateComment: (
       state,
       action: PayloadAction<{ id: string; commentText: string }>
     ) => {
-      const comment = state.find((comment) => comment.id === action.payload.id);
-      if (comment) {
-        comment.commentText = action.payload.commentText;
-      }
+      const { id, commentText } = action.payload;
+      state[id].commentText = commentText;
     },
 
     deleteComment: (state, action: PayloadAction<{ id: string }>) => {
-      const filteredComments = state.filter(
-        (comment) => comment.id !== action.payload.id
-      );
-      return filteredComments;
+      const { id } = action.payload;
+      delete state[id];
     },
   },
 });

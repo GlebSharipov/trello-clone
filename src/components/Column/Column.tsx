@@ -21,7 +21,7 @@ export const Column: FC<ColumnProps> = ({ columnName, id, onCardClick }) => {
   const [isCardTextEditable, setIsCardTextEditable] = useState(false);
 
   const filteredCards = useMemo(
-    () => cards.filter((card) => card.columnId === id),
+    () => Object.values(cards).filter((card) => card.columnId === id),
     [cards, id]
   );
 

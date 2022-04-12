@@ -2,19 +2,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { columnsDefaultData } from "utils/mock";
 
 export const columnsSlice = createSlice({
-  name: "column",
+  name: "columns",
   initialState: columnsDefaultData,
   reducers: {
     updateColumnName: (
       state,
       action: PayloadAction<{ id: string; columnName: string }>
     ) => {
-      const comment = Object.values(state).find(
-        (column) => column.id === action.payload.id
-      );
-      if (comment) {
-        comment.columnName = action.payload.columnName;
-      }
+      const { id, columnName } = action.payload;
+      state[id].columnName = columnName;
     },
   },
 });
