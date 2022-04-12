@@ -1,10 +1,8 @@
 import React, { FC, useState } from "react";
 
-import { Comments } from "components";
-import { Modal, Button } from "components/UI";
-import { ButtonCross } from "components/UI";
+import { Comments, TextForm } from "components";
+import { Modal } from "components/UI";
 import { COLORS } from "constant";
-import TextareaAutosize from "react-textarea-autosize";
 import { updateCardText, updateDescription } from "store/ducks/cards";
 import { selectCardById } from "store/ducks/cards";
 import { selectColumnNameById } from "store/ducks/columns";
@@ -32,11 +30,7 @@ export const CardPopup: FC<CardPopupProps> = ({
   const description = card?.description;
 
   const [isDescriptionEditable, setIsDescriptionEditable] = useState(false);
-  const [descriptionText, setDescriptionText] = useState(description);
-  const [editTextCard, setEditTextCard] = useState(cardText);
   const [isCardEditable, setIsCardEditable] = useState(false);
-  const trimmedDescription = descriptionText?.trim();
-  const trimmedCardText = editTextCard?.trim();
 
   const toggleDescriptionEditable = () => {
     if (!isDescriptionEditable) {
@@ -50,54 +44,13 @@ export const CardPopup: FC<CardPopupProps> = ({
     setIsCardEditable(true);
   };
 
-  const handleUpdateCard = () => {
-    if (trimmedCardText) {
-      setEditTextCard(trimmedCardText);
-      dispatch(updateCardText({ id: cardId, cardText: trimmedCardText }));
-    }
-  };
-
-  const handleChangeCardText: React.ChangeEventHandler<HTMLTextAreaElement> = (
-    e
-  ) => {
-    setEditTextCard(e.target.value);
-  };
-
-  const handleBlur: React.ChangeEventHandler<HTMLTextAreaElement> = () => {
-    if (trimmedCardText) {
-      handleUpdateCard();
-    }
+  const handleSubmitCard = (value: string) => {
+    dispatch(updateCardText({ id: cardId, cardText: value }));
     setIsCardEditable(false);
   };
 
-  const handeleKeyDownEnter = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>
-  ) => {
-    if (event.code === "Enter") {
-      handleUpdateCard();
-      setIsCardEditable(false);
-    }
-  };
-
-  const handleAddDiscription = () => {
-    if (trimmedDescription) {
-      setDescriptionText(trimmedDescription);
-      dispatch(
-        updateDescription({ id: cardId, description: trimmedDescription })
-      );
-    }
-  };
-
-  const handleChangeTextDescription: React.ChangeEventHandler<
-    HTMLTextAreaElement
-  > = (e) => {
-    setDescriptionText(e.target.value);
-  };
-
-  const handleBlurDescription: React.ChangeEventHandler<
-    HTMLTextAreaElement
-  > = () => {
-    handleAddDiscription();
+  const handleSubmitDescription = (value: string) => {
+    dispatch(updateDescription({ id: cardId, description: value.trim() }));
     setIsDescriptionEditable(false);
   };
 
@@ -106,15 +59,15 @@ export const CardPopup: FC<CardPopupProps> = ({
       <PopupHeader>
         <Container>
           {isCardEditable ? (
-            <CardTitleInput
-              onKeyDown={handeleKeyDownEnter}
-              onBlur={handleBlur}
-              value={editTextCard}
-              autoFocus
-              onChange={handleChangeCardText}
+            <TextForm
+              onSubmit={handleSubmitCard}
+              isValidate
+              isOnBlur
+              name="cardEditable"
+              defaultValues={cardText}
             />
           ) : (
-            <CardTitle onClick={handleCardEditable}>{cardText}</CardTitle>
+            <CardText onClick={handleCardEditable}>{cardText}</CardText>
           )}
 
           <ColumnName>in list: {columnName}</ColumnName>
@@ -125,27 +78,16 @@ export const CardPopup: FC<CardPopupProps> = ({
         <DescriptionTitle>Description</DescriptionTitle>
         {isDescriptionEditable ? (
           <ContainerDescription>
-            <DescriptionText
-              value={descriptionText}
-              onBlur={handleBlurDescription}
-              onChange={handleChangeTextDescription}
-              autoFocus
-              placeholder="Add a more detailed description..."
-            ></DescriptionText>
-            <ButtonContainer>
-              <StyledButton
-                text="Save"
-                type="submit"
-                onClick={handleAddDiscription}
-              />
-              <ButtonCross onClick={toggleDescriptionEditable} />
-            </ButtonContainer>
+            <TextForm
+              onSubmit={handleSubmitDescription}
+              name="description"
+              defaultValues={description}
+              isVisibleCross
+            />
           </ContainerDescription>
         ) : (
           <DescriptionFakeText onClick={toggleDescriptionEditable}>
-            {descriptionText
-              ? description
-              : "Add a more detailed description..."}
+            {description ? description : "Add a more detailed description..."}
           </DescriptionFakeText>
         )}
       </Description>
@@ -161,7 +103,7 @@ const StyledModal = styled(Modal)`
   align-items: flex-start;
   flex-direction: column;
   width: 100%;
-  height: 80%;
+  height: 100%;
   background-color: ${COLORS.white};
   padding: 10px 20px;
   margin: 48px 0 80px;
@@ -188,7 +130,7 @@ const AuthorName = styled.p`
   color: ${COLORS.black};
 `;
 
-const CardTitle = styled.h2`
+const CardText = styled.h2`
   word-break: break-all;
   cursor: pointer;
   padding: 5px;
@@ -200,18 +142,6 @@ const CardTitle = styled.h2`
   &:hover {
     background-color: ${COLORS.lighte_gray};
   }
-`;
-
-const CardTitleInput = styled(TextareaAutosize)`
-  width: 95%;
-  font-size: 18px;
-  padding: 5px;
-  border-radius: 4px;
-  overflow-wrap: break-word;
-  resize: none;
-  overflow: hidden;
-  border: 2px solid ${COLORS.blue};
-  background-color: ${COLORS.white};
 `;
 
 const ColumnName = styled.div`
@@ -245,38 +175,9 @@ const DescriptionFakeText = styled.div`
   }
 `;
 
-const DescriptionText = styled(TextareaAutosize)`
-  height: 100px;
-  font-size: 16px;
-  padding: 10px;
-  border-radius: 4px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  resize: none;
-  border: 2px solid ${COLORS.blue};
-  background-color: ${COLORS.white};
-`;
-
 const ContainerDescription = styled.div`
   max-height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  max-width: 150px;
-  margin-top: 5px;
-`;
-
-const StyledButton = styled(Button)`
-  margin-top: 0;
-  margin-right: 10px;
-  color: ${COLORS.white};
-  background-color: ${COLORS.blue};
-  &:hover {
-    background-color: ${COLORS.dark_blue};
-  }
 `;

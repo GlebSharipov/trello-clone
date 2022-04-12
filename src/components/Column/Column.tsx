@@ -1,9 +1,7 @@
 import React, { FC, useState, useMemo } from "react";
 
-import { Card } from "components";
-import { Button, ButtonCross } from "components/UI";
+import { Card, TextForm } from "components";
 import { COLORS } from "constant/colors";
-import TextareaAutosize from "react-textarea-autosize";
 import { addNewCard } from "store/ducks/cards";
 import { useAppSelector, useAppDispatch, RootState } from "store/store";
 import styled from "styled-components";
@@ -20,51 +18,23 @@ export const Column: FC<ColumnProps> = ({ columnName, id, onCardClick }) => {
   const cards = useAppSelector((state: RootState) => state.cards);
   const dispatch = useAppDispatch();
 
-  const [isCardTitleEditable, setIsCardTitleEditable] = useState(false);
-  const [cardText, setCardText] = useState("");
-  const trimmedText = cardText.trim();
+  const [isCardTextEditable, setIsCardTextEditable] = useState(false);
 
   const filteredCards = useMemo(
     () => cards.filter((card) => card.columnId === id),
     [cards, id]
   );
 
-  const handleChangeText: React.ChangeEventHandler<HTMLTextAreaElement> = (
-    e
-  ) => {
-    setCardText(e.target.value);
+  const handleSubmitNewCard = (value: string) => {
+    if (value.trim()) {
+      dispatch(addNewCard({ columnId: id, cardText: value }));
+      setIsCardTextEditable(false);
+    }
+    setIsCardTextEditable(false);
   };
 
   const toggleIsInputVisible = () => {
-    if (!isCardTitleEditable) {
-      setIsCardTitleEditable(true);
-    } else {
-      setIsCardTitleEditable(false);
-    }
-  };
-
-  const handleAddCard = () => {
-    if (trimmedText) {
-      setCardText(trimmedText);
-      dispatch(addNewCard({ columnId: id, cardText: trimmedText }));
-      setCardText("");
-      setIsCardTitleEditable(false);
-    }
-  };
-
-  const handleBlur: React.ChangeEventHandler<HTMLTextAreaElement> = () => {
-    if (trimmedText) {
-      handleAddCard();
-    }
-    setIsCardTitleEditable(false);
-  };
-
-  const handeleKeyDownEnter = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>
-  ) => {
-    if (event.code === "Enter") {
-      handleAddCard();
-    }
+    setIsCardTextEditable(true);
   };
 
   return (
@@ -81,23 +51,14 @@ export const Column: FC<ColumnProps> = ({ columnName, id, onCardClick }) => {
         ))}
       </CardContainer>
 
-      {isCardTitleEditable ? (
+      {isCardTextEditable ? (
         <Container>
-          <InputAddCard
-            onKeyDown={handeleKeyDownEnter}
-            autoFocus
-            onBlur={handleBlur}
-            value={cardText}
-            onChange={handleChangeText}
+          <TextForm
+            onSubmit={handleSubmitNewCard}
+            isOnBlur
+            name="addNewCard"
+            defaultValues=""
           />
-          <ButtonContainer>
-            <StyledButton
-              type="submit"
-              text="Add card"
-              onClick={handleAddCard}
-            />
-            <ButtonCross onClick={toggleIsInputVisible} />
-          </ButtonContainer>
         </Container>
       ) : (
         <AddCardButton onClick={toggleIsInputVisible}>
@@ -139,32 +100,5 @@ const AddCardButton = styled.button`
   &:hover {
     background-color: ${COLORS.lighte_gray};
     color: ${COLORS.black};
-  }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 10px 0;
-`;
-
-const InputAddCard = styled(TextareaAutosize)`
-  font-size: 16px;
-  width: 100%;
-  padding-bottom: 30px;
-  background-color: ${COLORS.white};
-  overflow: hidden;
-  overflow-wrap: break-word;
-  resize: none;
-  box-shadow: 0 1px 0 ${COLORS.dark_gray};
-`;
-
-const StyledButton = styled(Button)`
-  color: ${COLORS.white};
-  background-color: ${COLORS.blue};
-  margin: 0;
-  margin-right: 10px;
-  &:hover {
-    background-color: ${COLORS.dark_blue};
   }
 `;
