@@ -55,7 +55,7 @@ export const TextForm: FC<TextFormProps> = ({
       <ButtonContainer>
         <StyledButton text="Save" type="submit" />
         {isVisibleCross && (
-          <ButtonCross onClick={() => reset({ [name]: "" })} />
+          <ButtonCross onClick={() => reset({ [name]: defaultValues })} />
         )}
       </ButtonContainer>
     </Root>

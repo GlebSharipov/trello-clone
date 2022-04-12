@@ -38,7 +38,6 @@ const Overlay = styled.div`
   position: absolute;
   overflow: hidden;
   width: 100%;
-  height: 100%;
   background-color: ${COLORS.transparent_black};
   left: 0;
   top: 0;
@@ -57,7 +56,6 @@ const ModalWrapper = styled.div`
   max-width: 750px;
   max-height: 88vh;
   padding: 10px 20px;
-  margin: 48px 0 80px;
   border-radius: 4px;
   border: none;
   z-index: ${Z_INDEX.index35};
