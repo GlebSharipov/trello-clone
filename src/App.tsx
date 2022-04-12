@@ -1,25 +1,18 @@
 import React, { FC } from "react";
 
 import { COLORS } from "constant/colors";
-import { useLocalStorage } from "hooks";
+import { useAppSelector, RootState } from "store/store";
 import styled from "styled-components";
 
 import { UserNamePopup, Board, Header } from "./components";
 
 const App: FC = () => {
-  const [authorName, setAuthorName] = useLocalStorage("AuthorName", "");
+  const userName = useAppSelector((state: RootState) => state.user?.userName);
 
   return (
     <Root>
-      <Header authorName={authorName} />
-      {authorName ? (
-        <Board authorName={authorName} />
-      ) : (
-        <UserNamePopup
-          isVisible={authorName.length === 0}
-          onUserNameChange={setAuthorName}
-        />
-      )}
+      <Header userName={userName} />
+      {userName ? <Board userName={userName} /> : <UserNamePopup />}
     </Root>
   );
 };

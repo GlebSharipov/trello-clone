@@ -13,5 +13,5 @@ export interface CardType {
 
 export interface ColumnType {
   id: string;
-  textTitle: string;
+  columnName: string;
 }

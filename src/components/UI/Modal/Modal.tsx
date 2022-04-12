@@ -38,7 +38,6 @@ const Overlay = styled.div`
   position: absolute;
   overflow: hidden;
   width: 100%;
-  height: 100%;
   background-color: ${COLORS.transparent_black};
   left: 0;
   top: 0;
@@ -52,13 +51,11 @@ const ButtonContainer = styled.div`
   justify-content: flex-end;
 `;
 
-const ModalWrapper = styled.form`
+const ModalWrapper = styled.div`
   position: absolute;
   max-width: 750px;
-  max-height: 80vh;
-  background-color: ${COLORS.white};
+  max-height: 88vh;
   padding: 10px 20px;
-  margin: 48px 0 80px;
   border-radius: 4px;
   border: none;
   z-index: ${Z_INDEX.index35};
