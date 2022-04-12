@@ -54,7 +54,9 @@ export const TextForm: FC<TextFormProps> = ({
       <Error>{errors?.[name] && <p>{errors?.[name].message}</p>}</Error>
       <ButtonContainer>
         <StyledButton text="Save" type="submit" />
-        {isVisibleCross && <ButtonCross onClick={() => reset()} />}
+        {isVisibleCross && (
+          <ButtonCross onClick={() => reset({ [name]: "" })} />
+        )}
       </ButtonContainer>
     </Root>
   );
