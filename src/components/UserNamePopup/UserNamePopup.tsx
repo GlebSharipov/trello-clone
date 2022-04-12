@@ -20,6 +20,7 @@ export const UserNamePopup: FC = () => {
       <Container>
         <NameForm
           name="name"
+          isMaxSymbols
           isVisibleButton
           placeholder="Enter your name"
           onSubmit={handleSubmitUserName}

@@ -10,6 +10,7 @@ import { isEmptyString } from "utils/validators";
 interface NameFormProps {
   className?: string;
   name: string;
+  isMaxSymbols?: boolean;
   columnName?: string;
   defaultValues?: string | undefined;
   placeholder?: string;
@@ -24,6 +25,7 @@ export const NameForm: FC<NameFormProps> = ({
   columnName,
   defaultValues,
   placeholder,
+  isMaxSymbols = false,
   isVisibleButton = false,
   isOnBlur = false,
   onSubmit,
@@ -47,6 +49,12 @@ export const NameForm: FC<NameFormProps> = ({
         {...register(name, {
           validate: isEmptyString,
           onBlur: isOnBlur ? handleSubmit(handleTextSubmit) : undefined,
+          maxLength: isMaxSymbols
+            ? {
+                value: 20,
+                message: "Max 20 symbols.",
+              }
+            : undefined,
         })}
         placeholder={placeholder}
         {...props}
