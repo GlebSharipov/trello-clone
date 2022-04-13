@@ -38,6 +38,7 @@ const Overlay = styled.div`
   position: absolute;
   overflow: hidden;
   width: 100%;
+  height: 100%;
   background-color: ${COLORS.transparent_black};
   left: 0;
   top: 0;
